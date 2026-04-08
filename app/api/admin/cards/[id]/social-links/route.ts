@@ -18,10 +18,10 @@ export async function GET(req: NextRequest, { params }: Params) {
 export async function POST(req: NextRequest, { params }: Params) {
   if (!(await requireAdmin(req))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
-  const { platform, url, sort_order } = await req.json()
+  const { platform, url, label, sort_order } = await req.json()
   const supabase = getSupabaseServer()
   const { data, error } = await supabase.from('social_links')
-    .insert({ card_id: id, platform, url, sort_order: sort_order ?? 0 }).select().single()
+    .insert({ card_id: id, platform, url, label: label || null, sort_order: sort_order ?? 0 }).select().single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json(data, { status: 201 })
 }
