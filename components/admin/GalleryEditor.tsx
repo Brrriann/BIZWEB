@@ -4,6 +4,59 @@ import { useState } from 'react'
 import Image from 'next/image'
 import type { GalleryImage } from '@/lib/types'
 
+const MAX_FILE_SIZE = 500 * 1024 // 500KB
+const MAX_DIMENSION = 1920
+
+function compressImage(file: File): Promise<File> {
+  return new Promise((resolve, reject) => {
+    // GIF는 압축하지 않음
+    if (file.type === 'image/gif') {
+      if (file.size <= MAX_FILE_SIZE) return resolve(file)
+      return reject(new Error('GIF 파일은 500KB 이하만 업로드 가능합니다'))
+    }
+    // 이미 500KB 이하면 그대로
+    if (file.size <= MAX_FILE_SIZE) return resolve(file)
+
+    const img = new window.Image()
+    const url = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      const canvas = document.createElement('canvas')
+      let { width, height } = img
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height)
+        width = Math.round(width * ratio)
+        height = Math.round(height * ratio)
+      }
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')!
+      ctx.drawImage(img, 0, 0, width, height)
+
+      // quality를 낮춰가며 500KB 이하가 될 때까지 압축
+      let quality = 0.8
+      const tryCompress = () => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return reject(new Error('이미지 압축 실패'))
+            if (blob.size <= MAX_FILE_SIZE || quality <= 0.1) {
+              resolve(new File([blob], file.name.replace(/\.\w+$/, '.webp'), { type: 'image/webp' }))
+            } else {
+              quality -= 0.1
+              tryCompress()
+            }
+          },
+          'image/webp',
+          quality,
+        )
+      }
+      tryCompress()
+    }
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('이미지 로드 실패')) }
+    img.src = url
+  })
+}
+
 interface Props { cardId: string; images: GalleryImage[]; onUpdate: () => void }
 
 export function GalleryEditor({ cardId, images, onUpdate }: Props) {
@@ -13,18 +66,25 @@ export function GalleryEditor({ cardId, images, onUpdate }: Props) {
     const file = e.target.files?.[0]
     if (!file) return
     setUploading(true)
-    const formData = new FormData()
-    formData.append('file', file)
-    const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: formData })
-    const { url } = await uploadRes.json()
-    await fetch(`/api/admin/cards/${cardId}/gallery`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image_url: url, sort_order: images.length }),
-    })
-    onUpdate()
-    setUploading(false)
-    e.target.value = ''
+    try {
+      const compressed = await compressImage(file)
+      const formData = new FormData()
+      formData.append('file', compressed)
+      const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: formData })
+      const data = await uploadRes.json()
+      if (!uploadRes.ok) throw new Error(data.error || '업로드 실패')
+      await fetch(`/api/admin/cards/${cardId}/gallery`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image_url: data.url, sort_order: images.length }),
+      })
+      onUpdate()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : '업로드 실패')
+    } finally {
+      setUploading(false)
+      e.target.value = ''
+    }
   }
 
   async function removeImage(imgId: string) {
