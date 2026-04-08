@@ -24,15 +24,15 @@ export default function EditCardPage() {
 
   useEffect(() => { load() }, [load])
 
-  if (!data) return <div className="p-8 text-gray-400">불러오는 중...</div>
+  if (!data) return <div className="p-8" style={{ color: 'var(--text-muted)' }}>불러오는 중...</div>
 
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => router.push('/admin')} className="text-gray-400 hover:text-gray-600 text-sm">← 목록</button>
-        <h1 className="text-xl font-bold text-gray-900">{data.card.name} 편집</h1>
+        <button onClick={() => router.push('/admin')} className="text-sm hover:opacity-80" style={{ color: 'var(--text-muted)' }}>← 목록</button>
+        <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{data.card.name} 편집</h1>
         <a href={`/${data.card.slug}`} target="_blank" rel="noopener noreferrer"
-          className="ml-auto text-sm text-blue-600 hover:underline">페이지 보기 →</a>
+          className="ml-auto text-sm font-semibold" style={{ color: 'var(--accent)' }}>페이지 보기 →</a>
       </div>
       <CardEditor {...data} onRefresh={load} />
     </div>

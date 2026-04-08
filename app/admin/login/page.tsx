@@ -27,23 +27,40 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-2xl shadow-sm w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">관리자 로그인</h1>
-        <p className="text-sm text-gray-400 mb-6">마이네임이즈 관리자 전용</p>
+    <main className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-base)' }}>
+      <div
+        className="p-8 rounded-2xl w-full max-w-sm"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          boxShadow: 'var(--shadow-elevated)',
+          border: '1px solid var(--border)',
+        }}
+      >
+        <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>관리자 로그인</h1>
+        <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>마이네임이즈 관리자 전용</p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="password"
             placeholder="PIN 입력"
             value={pin}
             onChange={e => setPin(e.target.value)}
-            className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded-full px-5 py-3 text-sm focus:outline-none focus:ring-2"
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              color: 'var(--text-primary)',
+              border: '1px solid var(--border)',
+            }}
           />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-sm" style={{ color: '#f3727f' }}>{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white rounded-xl py-3 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="rounded-full py-3 text-sm font-bold uppercase tracking-wider transition-all hover:scale-[1.02] disabled:opacity-50"
+            style={{
+              backgroundColor: 'var(--accent)',
+              color: '#000',
+              letterSpacing: '0.1em',
+            }}
           >
             {loading ? '로그인 중...' : '로그인'}
           </button>

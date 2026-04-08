@@ -10,6 +10,7 @@ import { SocialLinks } from '@/components/card/SocialLinks'
 import { ContactInfo } from '@/components/card/ContactInfo'
 import { Gallery } from '@/components/card/Gallery'
 import { ViewCounter } from '@/components/card/ViewCounter'
+import { ThemeToggle } from '@/components/card/ThemeToggle'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -49,7 +50,11 @@ export default async function CardPage({ params }: Props) {
   const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`
 
   return (
-    <main className="min-h-screen bg-white max-w-md mx-auto">
+    <main
+      className="min-h-screen max-w-md mx-auto relative"
+      style={{ backgroundColor: 'var(--bg-base)', transition: 'background-color 0.3s ease' }}
+    >
+      <ThemeToggle />
       <HeroSection
         name={card.name} title={card.title} company={card.company}
         profileImageUrl={card.profile_image_url} themeColor={card.theme_color}
@@ -60,7 +65,13 @@ export default async function CardPage({ params }: Props) {
       <Gallery images={galleryImages} />
       <ViewCounter cardId={card.id} initialCount={viewCount} />
       <footer className="text-center pb-8 pt-2">
-        <Link href="/privacy" className="text-xs text-gray-300 hover:text-gray-400">개인정보처리방침</Link>
+        <Link
+          href="/privacy"
+          className="text-xs transition-colors"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          개인정보처리방침
+        </Link>
       </footer>
     </main>
   )

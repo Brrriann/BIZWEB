@@ -35,26 +35,35 @@ export function SocialLinksEditor({ cardId, links, onUpdate }: Props) {
     onUpdate()
   }
 
+  const inputStyle = {
+    backgroundColor: 'var(--bg-elevated)',
+    color: 'var(--text-primary)',
+    border: '1px solid var(--border)',
+  }
+
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">SNS 링크</label>
+      <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>SNS 링크</label>
       <div className="flex flex-col gap-2 mb-3">
         {links.map(link => (
-          <div key={link.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
-            <span className="text-sm text-gray-700">[{link.platform}] {link.url}</span>
-            <button type="button" onClick={() => removeLink(link.id)} className="text-red-400 text-xs hover:text-red-600">삭제</button>
+          <div key={link.id} className="flex items-center justify-between rounded-xl px-4 py-2.5"
+            style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border)' }}>
+            <span className="text-sm" style={{ color: 'var(--text-primary)' }}>[{link.platform}] {link.url}</span>
+            <button type="button" onClick={() => removeLink(link.id)}
+              className="text-xs font-semibold" style={{ color: '#f3727f' }}>삭제</button>
           </div>
         ))}
       </div>
       <form onSubmit={addLink} className="flex gap-2">
         <select value={platform} onChange={e => setPlatform(e.target.value)}
-          className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm">
+          className="rounded-xl px-3 py-2 text-sm" style={inputStyle}>
           {PLATFORMS.map(p => <option key={p} value={p}>{p}</option>)}
         </select>
         <input value={url} onChange={e => setUrl(e.target.value)} placeholder="URL 입력"
-          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm flex-1" />
+          className="rounded-xl px-3 py-2 text-sm flex-1" style={inputStyle} />
         <button type="submit" disabled={loading}
-          className="bg-blue-600 text-white rounded-lg px-3 py-1.5 text-sm disabled:opacity-50">추가</button>
+          className="rounded-full px-4 py-2 text-sm font-bold disabled:opacity-50"
+          style={{ backgroundColor: 'var(--accent)', color: '#000' }}>추가</button>
       </form>
     </div>
   )

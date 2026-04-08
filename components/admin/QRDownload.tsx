@@ -22,7 +22,7 @@ export function QRDownload({ slug }: { slug: string }) {
     <div className="flex flex-col items-start gap-2">
       <canvas ref={canvasRef} className="rounded-lg" />
       <button type="button" onClick={download}
-        className="text-sm text-blue-600 font-medium hover:underline">
+        className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>
         PNG 다운로드
       </button>
     </div>

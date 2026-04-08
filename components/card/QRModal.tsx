@@ -24,12 +24,30 @@ export function QRModal({ url, onClose }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl p-6 flex flex-col items-center gap-4" onClick={e => e.stopPropagation()}>
-        <h2 className="font-bold text-gray-900">QR 코드</h2>
-        <canvas ref={canvasRef} />
-        <button onClick={download} className="text-sm text-blue-600 font-medium">PNG 저장</button>
-        <button onClick={onClose} className="text-sm text-gray-400">닫기</button>
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50 p-4"
+      style={{ backgroundColor: 'var(--overlay)' }}
+      onClick={onClose}
+    >
+      <div
+        className="rounded-2xl p-6 flex flex-col items-center gap-4"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          boxShadow: 'var(--shadow-elevated)',
+          border: '1px solid var(--border)',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <h2 className="font-bold" style={{ color: 'var(--text-primary)' }}>QR 코드</h2>
+        <canvas ref={canvasRef} className="rounded-lg" />
+        <button
+          onClick={download}
+          className="text-sm font-bold rounded-full px-6 py-2 transition-all hover:scale-105"
+          style={{ backgroundColor: 'var(--accent)', color: '#000' }}
+        >
+          PNG 저장
+        </button>
+        <button onClick={onClose} className="text-sm font-medium" style={{ color: 'var(--text-muted)' }}>닫기</button>
       </div>
     </div>
   )

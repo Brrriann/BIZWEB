@@ -21,26 +21,38 @@ export function ActionBar({ card, onQR }: Props) {
     URL.revokeObjectURL(url)
   }
 
-  const btnClass = "flex flex-col items-center gap-1 flex-1 py-3 rounded-xl text-white text-xs font-medium transition-opacity hover:opacity-90 active:opacity-80"
+  const actions = [
+    card.phone && { icon: '📞', label: '전화', href: `tel:${card.phone}` },
+    card.phone && { icon: '💬', label: '문자', href: `sms:${card.phone}` },
+    { icon: '💾', label: '저장', onClick: downloadVCF },
+    { icon: '📱', label: 'QR', onClick: onQR },
+  ].filter(Boolean) as { icon: string; label: string; href?: string; onClick?: () => void }[]
 
   return (
-    <div className="px-4 pb-4 flex gap-2">
-      {card.phone && (
-        <a href={`tel:${card.phone}`} className={btnClass} style={{ backgroundColor: card.theme_color }}>
-          <span className="text-lg">📞</span>전화
-        </a>
-      )}
-      {card.phone && (
-        <a href={`sms:${card.phone}`} className={btnClass} style={{ backgroundColor: card.theme_color }}>
-          <span className="text-lg">💬</span>문자
-        </a>
-      )}
-      <button onClick={downloadVCF} className={btnClass} style={{ backgroundColor: card.theme_color }}>
-        <span className="text-lg">💾</span>저장
-      </button>
-      <button onClick={onQR} className={btnClass} style={{ backgroundColor: card.theme_color }}>
-        <span className="text-lg">📱</span>QR
-      </button>
+    <div className="px-4 pb-5 flex gap-2">
+      {actions.map(action => {
+        const className = "flex flex-col items-center gap-1.5 flex-1 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:scale-105 active:scale-95"
+        const style = {
+          backgroundColor: 'var(--bg-elevated)',
+          color: 'var(--text-primary)',
+          boxShadow: 'var(--shadow-card)',
+          border: '1px solid var(--border)',
+          letterSpacing: '0.05em',
+        }
+
+        if (action.href) {
+          return (
+            <a key={action.label} href={action.href} className={className} style={style}>
+              <span className="text-lg">{action.icon}</span>{action.label}
+            </a>
+          )
+        }
+        return (
+          <button key={action.label} onClick={action.onClick} className={className} style={style}>
+            <span className="text-lg">{action.icon}</span>{action.label}
+          </button>
+        )
+      })}
     </div>
   )
 }

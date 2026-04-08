@@ -51,22 +51,25 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
     onRefresh()
   }
 
-  const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-  const labelClass = "block text-sm font-medium text-gray-700 mb-1"
+  const inputStyle = {
+    backgroundColor: 'var(--bg-elevated)',
+    color: 'var(--text-primary)',
+    border: '1px solid var(--border)',
+  }
 
   return (
     <form onSubmit={save} className="space-y-6">
       {/* 프로필 이미지 */}
       <div>
-        <label className={labelClass}>프로필 사진</label>
+        <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>프로필 사진</label>
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-gray-100 overflow-hidden">
+          <div className="w-16 h-16 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--bg-elevated)', border: '2px solid var(--border)' }}>
             {form.profile_image_url
-              ? <Image src={form.profile_image_url} alt="" width={64} height={64} className="object-cover" />
+              ? <Image src={form.profile_image_url} alt="" width={64} height={64} className="object-cover w-full h-full" />
               : <div className="w-full h-full flex items-center justify-center text-2xl">👤</div>
             }
           </div>
-          <label className="cursor-pointer text-sm text-blue-600 font-medium hover:underline">
+          <label className="cursor-pointer text-sm font-semibold" style={{ color: 'var(--accent)' }}>
             {uploadingProfile ? '업로드 중...' : '사진 변경'}
             <input type="file" accept="image/*" onChange={uploadProfile} disabled={uploadingProfile} className="hidden" />
           </label>
@@ -75,46 +78,70 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
 
       {/* 기본 정보 */}
       <div className="grid grid-cols-2 gap-4">
-        <div><label className={labelClass}>이름 *</label><input required value={form.name} onChange={e => update('name', e.target.value)} className={inputClass} /></div>
-        <div><label className={labelClass}>직함</label><input value={form.title ?? ''} onChange={e => update('title', e.target.value)} className={inputClass} /></div>
-        <div><label className={labelClass}>회사</label><input value={form.company ?? ''} onChange={e => update('company', e.target.value)} className={inputClass} /></div>
-        <div><label className={labelClass}>전화번호</label><input value={form.phone ?? ''} onChange={e => update('phone', e.target.value)} className={inputClass} /></div>
-        <div><label className={labelClass}>이메일</label><input type="email" value={form.email ?? ''} onChange={e => update('email', e.target.value)} className={inputClass} /></div>
-        <div><label className={labelClass}>홈페이지</label><input value={form.website ?? ''} onChange={e => update('website', e.target.value)} className={inputClass} /></div>
+        {[
+          { label: '이름 *', field: 'name', required: true },
+          { label: '직함', field: 'title' },
+          { label: '회사', field: 'company' },
+          { label: '전화번호', field: 'phone' },
+          { label: '이메일', field: 'email', type: 'email' },
+          { label: '홈페이지', field: 'website' },
+        ].map(({ label, field, required, type }) => (
+          <div key={field}>
+            <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>{label}</label>
+            <input
+              type={type || 'text'}
+              required={required}
+              value={(form as unknown as Record<string, string>)[field] ?? ''}
+              onChange={e => update(field, e.target.value)}
+              className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+              style={inputStyle}
+            />
+          </div>
+        ))}
       </div>
-      <div><label className={labelClass}>주소</label><input value={form.address ?? ''} onChange={e => update('address', e.target.value)} className={inputClass} /></div>
-      <div><label className={labelClass}>소개글</label><textarea value={form.bio ?? ''} onChange={e => update('bio', e.target.value)} rows={3} className={inputClass} /></div>
+      <div>
+        <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>주소</label>
+        <input value={form.address ?? ''} onChange={e => update('address', e.target.value)}
+          className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2" style={inputStyle} />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>소개글</label>
+        <textarea value={form.bio ?? ''} onChange={e => update('bio', e.target.value)} rows={3}
+          className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2" style={inputStyle} />
+      </div>
 
       {/* 테마 */}
       <ThemePicker value={form.theme_color} onChange={v => update('theme_color', v)} />
 
       {/* 활성 상태 */}
       <div className="flex items-center gap-2">
-        <input type="checkbox" id="active" checked={form.is_active} onChange={e => update('is_active', e.target.checked)} className="w-4 h-4" />
-        <label htmlFor="active" className="text-sm text-gray-700">페이지 활성화</label>
+        <input type="checkbox" id="active" checked={form.is_active} onChange={e => update('is_active', e.target.checked)}
+          className="w-4 h-4 rounded" style={{ accentColor: 'var(--accent)' }} />
+        <label htmlFor="active" className="text-sm" style={{ color: 'var(--text-secondary)' }}>페이지 활성화</label>
       </div>
 
       {/* 저장 */}
       <button type="submit" disabled={saving}
-        className="w-full bg-blue-600 text-white rounded-xl py-3 font-medium hover:bg-blue-700 transition-colors disabled:opacity-50">
+        className="w-full rounded-full py-3 font-bold uppercase tracking-wider transition-all hover:scale-[1.02] disabled:opacity-50"
+        style={{ backgroundColor: 'var(--accent)', color: '#000', letterSpacing: '0.1em' }}>
         {saving ? '저장 중...' : saved ? '✓ 저장됨' : '저장'}
       </button>
 
-      <hr className="border-gray-100" />
+      <hr style={{ borderColor: 'var(--border)' }} />
 
       {/* SNS */}
       <SocialLinksEditor cardId={card.id} links={socialLinks} onUpdate={onRefresh} />
 
-      <hr className="border-gray-100" />
+      <hr style={{ borderColor: 'var(--border)' }} />
 
       {/* 갤러리 */}
       <GalleryEditor cardId={card.id} images={galleryImages} onUpdate={onRefresh} />
 
-      <hr className="border-gray-100" />
+      <hr style={{ borderColor: 'var(--border)' }} />
 
       {/* QR */}
       <div>
-        <label className={labelClass}>QR 코드</label>
+        <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>QR 코드</label>
         <QRDownload slug={card.slug} />
       </div>
     </form>

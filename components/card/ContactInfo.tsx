@@ -14,10 +14,17 @@ export function ContactInfo({ card }: Props) {
   if (!items.length && !card.bio) return null
 
   return (
-    <div className="px-4 pb-4">
+    <div className="px-4 pb-5">
       {card.bio && (
-        <div className="mb-3 p-3 bg-gray-50 rounded-xl">
-          <p className="text-sm text-gray-600 leading-relaxed">{card.bio}</p>
+        <div
+          className="mb-3 p-4 rounded-xl"
+          style={{
+            backgroundColor: 'var(--bg-surface)',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow-card)',
+          }}
+        >
+          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{card.bio}</p>
         </div>
       )}
       <div className="flex flex-col gap-2">
@@ -27,12 +34,16 @@ export function ContactInfo({ card }: Props) {
             href={item.href}
             target={item.href.startsWith('http') ? '_blank' : undefined}
             rel="noopener noreferrer"
-            className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-3 p-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02]"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              border: '1px solid var(--border)',
+            }}
           >
             <span className="text-xl w-8 text-center">{item.icon}</span>
             <div>
-              <p className="text-xs text-gray-400">{item.label}</p>
-              <p className="text-sm text-gray-700 font-medium">{item.value}</p>
+              <p className="text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)', letterSpacing: '0.1em' }}>{item.label}</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{item.value}</p>
             </div>
           </a>
         ))}

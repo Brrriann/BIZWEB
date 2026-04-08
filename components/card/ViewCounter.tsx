@@ -20,7 +20,9 @@ export function ViewCounter({ cardId, initialCount }: Props) {
 
   return (
     <div className="px-4 pb-6 text-center">
-      <p className="text-xs text-gray-400">👁 {count.toLocaleString()}명이 방문했습니다</p>
+      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+        👁 {count.toLocaleString()}명이 방문했습니다
+      </p>
     </div>
   )
 }

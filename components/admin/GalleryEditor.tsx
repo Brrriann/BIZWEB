@@ -94,17 +94,21 @@ export function GalleryEditor({ cardId, images, onUpdate }: Props) {
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">갤러리</label>
+      <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>갤러리</label>
       <div className="grid grid-cols-3 gap-2 mb-3">
         {images.map(img => (
           <div key={img.id} className="relative aspect-square">
             <Image src={img.image_url} alt="" fill className="object-cover rounded-lg" />
             <button type="button" onClick={() => removeImage(img.id)}
-              className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">×</button>
+              className="absolute top-1 right-1 rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold"
+              style={{ backgroundColor: '#f3727f', color: '#000' }}>×</button>
           </div>
         ))}
       </div>
-      <label className={`inline-block cursor-pointer border-2 border-dashed border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-500 hover:border-blue-400 transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+      <label
+        className={`inline-block cursor-pointer border-2 border-dashed rounded-xl px-4 py-3 text-sm transition-all hover:scale-[1.02] ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        style={{ borderColor: 'var(--border-light)', color: 'var(--text-muted)' }}
+      >
         {uploading ? '업로드 중...' : '+ 이미지 추가'}
         <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} className="hidden" />
       </label>
