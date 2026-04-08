@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "cf:build": "npx @cloudflare/next-on-pages",
+    "cf:preview": "npm run cf:build && npx wrangler pages dev .vercel/output/static",
+    "cf:deploy": "npm run cf:build && npx wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",
