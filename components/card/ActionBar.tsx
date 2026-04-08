@@ -25,7 +25,7 @@ export function ActionBar({ card, onQR }: Props) {
   const actions = [
     card.phone && { icon: Phone, label: '전화', href: `tel:${card.phone}` },
     card.phone && { icon: MessageSquare, label: '문자', href: `sms:${card.phone}` },
-    { icon: Download, label: '저장', onClick: downloadVCF },
+    { icon: Download, label: '연락처저장', onClick: downloadVCF },
     { icon: QrCode, label: 'QR', onClick: onQR },
   ].filter(Boolean) as { icon: typeof Phone; label: string; href?: string; onClick?: () => void }[]
 
