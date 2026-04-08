@@ -1,5 +1,5 @@
 // app/admin/[id]/page.tsx
-// 주의: 'use client' 전용 페이지이므로 export const runtime = 'edge' 사용 안 함
+export const runtime = 'edge'
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
