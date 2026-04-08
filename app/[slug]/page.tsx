@@ -64,7 +64,14 @@ export default async function CardPage({ params }: Props) {
       <Gallery images={galleryImages} />
       <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
       <ViewCounter cardId={card.id} initialCount={viewCount} />
-      <footer className="text-center pb-8 pt-2">
+      <footer className="text-center pb-10 pt-2 flex flex-col items-center gap-3">
+        <Link
+          href="/contact"
+          className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-all hover:scale-105"
+          style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border)', color: 'var(--text-primary)' }}
+        >
+          <span style={{ color: 'var(--accent)' }}>✦</span> MY NAME IS 제작문의
+        </Link>
         <Link
           href="/privacy"
           className="text-xs transition-colors"
