@@ -24,7 +24,7 @@ export function ContactInfo({ card }: Props) {
             boxShadow: 'var(--shadow-card)',
           }}
         >
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{card.bio}</p>
+          <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-secondary)' }}>{card.bio}</p>
         </div>
       )}
       <div className="flex flex-col gap-2">
