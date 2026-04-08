@@ -21,6 +21,7 @@ export interface SocialLink {
   card_id: string
   platform: string
   url: string
+  label?: string
   sort_order: number
 }
 

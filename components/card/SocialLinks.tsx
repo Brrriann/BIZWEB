@@ -49,7 +49,7 @@ export function SocialLinks({ links, sectionTitle }: Props) {
               <div className="w-8 flex justify-center" style={{ color: 'var(--text-muted)' }}>
                 <Icon size={20} strokeWidth={1.5} />
               </div>
-              <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{meta.label}</span>
+              <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{link.label || meta.label}</span>
               <ChevronRight size={16} strokeWidth={1.5} className="ml-auto" style={{ color: 'var(--accent)' }} />
             </a>
           )
