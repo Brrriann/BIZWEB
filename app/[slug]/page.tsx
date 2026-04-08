@@ -10,6 +10,7 @@ import { SocialLinks } from '@/components/card/SocialLinks'
 import { ContactInfo } from '@/components/card/ContactInfo'
 import { Gallery } from '@/components/card/Gallery'
 import { ViewCounter } from '@/components/card/ViewCounter'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 
 interface Props { params: Promise<{ slug: string }> }
@@ -59,7 +60,7 @@ export default async function CardPage({ params }: Props) {
       <Gallery images={galleryImages} />
       <ViewCounter cardId={card.id} initialCount={viewCount} />
       <footer className="text-center pb-8 pt-2">
-        <a href="/privacy" className="text-xs text-gray-300 hover:text-gray-400">개인정보처리방침</a>
+        <Link href="/privacy" className="text-xs text-gray-300 hover:text-gray-400">개인정보처리방침</Link>
       </footer>
     </main>
   )

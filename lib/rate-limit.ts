@@ -11,6 +11,7 @@ export async function hashIP(ip: string): Promise<string> {
 }
 
 export async function shouldCountView(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabase: { from: (table: string) => any },
   cardId: string,
   ip: string

@@ -12,9 +12,9 @@ const PLATFORM_ICONS: Record<string, { icon: string; label: string }> = {
   link:      { icon: '🔗', label: '링크' },
 }
 
-interface Props { links: SocialLink[]; themeColor: string }
+interface Props { links: SocialLink[]; themeColor?: string }
 
-export function SocialLinks({ links, themeColor }: Props) {
+export function SocialLinks({ links }: Props) {
   if (!links.length) return null
   return (
     <div className="px-4 pb-4">
