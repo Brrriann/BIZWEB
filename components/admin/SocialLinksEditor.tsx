@@ -57,7 +57,7 @@ export function SocialLinksEditor({ cardId, links, onUpdate }: Props) {
           <div key={link.id} className="flex items-center justify-between rounded-xl px-4 py-2.5"
             style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border)' }}>
             <div className="text-sm" style={{ color: 'var(--text-primary)' }}>
-              <span style={{ color: 'var(--text-muted)' }}>[{link.platform}]</span>{' '}
+              {!link.label && <span style={{ color: 'var(--text-muted)' }}>[{link.platform}] </span>}
               {link.label && <span className="font-semibold">{link.label} · </span>}
               <span style={{ color: 'var(--text-secondary)' }}>{link.url}</span>
             </div>
@@ -70,14 +70,16 @@ export function SocialLinksEditor({ cardId, links, onUpdate }: Props) {
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex gap-2">
-          <select value={platform} onChange={e => setPlatform(e.target.value)}
-            className="rounded-xl px-3 py-2 text-sm" style={inputStyle}>
-            {PLATFORMS.map(p => <option key={p} value={p}>{p}</option>)}
-          </select>
+          {!label && (
+            <select value={platform} onChange={e => setPlatform(e.target.value)}
+              className="rounded-xl px-3 py-2 text-sm" style={inputStyle}>
+              {PLATFORMS.map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+          )}
           <input
             value={label}
             onChange={e => setLabel(e.target.value)}
-            placeholder="버튼 이름 (비우면 기본값)"
+            placeholder="버튼 이름 (비우면 플랫폼 기본값)"
             className="rounded-xl px-3 py-2 text-sm flex-1"
             style={inputStyle}
           />
