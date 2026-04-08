@@ -3,10 +3,11 @@ export const runtime = 'edge'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
+import { getEnv } from '@/lib/env'
 
 export async function POST(req: NextRequest) {
   const secret = req.headers.get('x-revalidate-secret')
-  if (secret !== process.env.REVALIDATE_SECRET) {
+  if (secret !== getEnv('REVALIDATE_SECRET')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

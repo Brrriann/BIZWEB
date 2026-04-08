@@ -1,10 +1,11 @@
 // lib/supabase.ts
 import { createClient } from '@supabase/supabase-js'
+import { getEnv } from '@/lib/env'
 
 export function getSupabaseServer() {
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    getEnv('NEXT_PUBLIC_SUPABASE_URL')!,
+    getEnv('SUPABASE_SERVICE_ROLE_KEY')!,
     { auth: { persistSession: false } }
   )
 }

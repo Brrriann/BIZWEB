@@ -1,11 +1,12 @@
 // lib/auth.ts
 import { SignJWT, jwtVerify } from 'jose'
+import { getEnv } from '@/lib/env'
 
 const COOKIE_NAME = 'admin_session'
 const EXPIRY = '8h'
 
 function getSecret() {
-  return new TextEncoder().encode(process.env.JWT_SECRET!)
+  return new TextEncoder().encode(getEnv('JWT_SECRET')!)
 }
 
 export async function signAdminToken(): Promise<string> {
