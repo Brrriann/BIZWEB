@@ -1,0 +1,60 @@
+<h2>마이네임이즈 — 아키텍처 접근 방식 3가지</h2>
+<p class="subtitle">비용 효율과 개발 속도 사이에서 최적점을 선택해주세요</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>정적 생성 (ISR) — 추천</h3>
+      <p>고객 페이지를 빌드 시 정적 HTML로 생성. 수정 시 해당 페이지만 재생성 (revalidate).</p>
+      <div style="margin-top:10px;font-size:13px;color:#555">
+        <div style="margin-bottom:4px">✅ 트래픽 늘어도 서버 비용 거의 없음 (CDN 서빙)</div>
+        <div style="margin-bottom:4px">✅ 페이지 로딩 속도 최고</div>
+        <div style="margin-bottom:4px">✅ Supabase 무료 티어로 오래 버팀</div>
+        <div style="margin-bottom:4px">⚠️ 고객 정보 수정 후 반영에 수초 딜레이</div>
+      </div>
+      <div style="margin-top:8px;background:#e8f5e9;padding:8px;border-radius:6px;font-size:12px">
+        💰 월 비용 예상: Vercel 무료 + Supabase 무료 = <strong>$0~25</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>서버사이드 렌더링 (SSR)</h3>
+      <p>매 요청마다 DB에서 데이터를 가져와 렌더링. 항상 최신 정보 보장.</p>
+      <div style="margin-top:10px;font-size:13px;color:#555">
+        <div style="margin-bottom:4px">✅ 수정 즉시 반영</div>
+        <div style="margin-bottom:4px">✅ 구현이 단순</div>
+        <div style="margin-bottom:4px">⚠️ 트래픽 많아질수록 서버 비용 증가</div>
+        <div style="margin-bottom:4px">⚠️ Vercel 서버리스 함수 호출 비용 발생</div>
+      </div>
+      <div style="margin-top:8px;background:#fff3e0;padding:8px;border-radius:6px;font-size:12px">
+        💰 월 비용 예상: Vercel $20 + Supabase $25 = <strong>$45+</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>하이브리드 (ISR + 실시간)</h3>
+      <p>기본 정보는 정적 생성, 조회수/링크 클릭 등 동적 데이터만 API로 실시간 처리.</p>
+      <div style="margin-top:10px;font-size:13px;color:#555">
+        <div style="margin-bottom:4px">✅ 비용 효율 + 실시간 분석 가능</div>
+        <div style="margin-bottom:4px">✅ 향후 방문자 통계 기능 추가 용이</div>
+        <div style="margin-bottom:4px">⚠️ 구현 복잡도 높음</div>
+        <div style="margin-bottom:4px">⚠️ MVP에는 과할 수 있음</div>
+      </div>
+      <div style="margin-top:8px;background:#e3f2fd;padding:8px;border-radius:6px;font-size:12px">
+        💰 월 비용 예상: Vercel 무료 + Supabase $0~25 = <strong>$0~35</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px;background:#f5f5f5;padding:12px;border-radius:8px;font-size:13px">
+  <strong>공통 스택:</strong> Next.js 15 (App Router) + Supabase (PostgreSQL) + Vercel 배포<br>
+  <strong>관리자 도구:</strong> 어떤 방식이든 별도 관리자 페이지에서 고객 명함 편집
+</div>

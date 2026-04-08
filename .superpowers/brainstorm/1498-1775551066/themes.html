@@ -1,0 +1,52 @@
+<h2>마이네임이즈 — 테마 선택 옵션</h2>
+<p class="subtitle">B 레이아웃 기반, 관리자가 고객별로 테마 지정 가능. 몇 가지 테마로 시작할까요?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>6가지 프리셋 테마</h3>
+      <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#2563eb"></div>블루</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#16a34a"></div>그린</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#dc2626"></div>레드</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#7c3aed"></div>퍼플</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#d97706"></div>골드</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#0f172a"></div>블랙</div>
+      </div>
+      <p>빠르고 선택하기 쉬움. 디자인 일관성 유지. MVP에 적합.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>프리셋 6개 + 커스텀 컬러피커</h3>
+      <div style="display:flex;gap:8px;margin:8px 0;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#2563eb"></div>블루</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px"><div style="width:16px;height:16px;border-radius:50%;background:#16a34a"></div>그린</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px">+ 4개...</div>
+        <div style="width:32px;height:16px;border-radius:4px;background:linear-gradient(90deg,red,yellow,green,blue,purple);font-size:10px"></div>
+        <span style="font-size:12px">+ 자유 색상</span>
+      </div>
+      <p>고객 요청에 맞게 정확한 브랜드 컬러 적용 가능. 대행 서비스에 최적.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>다크/라이트 모드 + 컬러피커</h3>
+      <div style="display:flex;gap:8px;margin:8px 0">
+        <div style="background:#fff;border:1px solid #ddd;border-radius:6px;padding:6px 10px;font-size:11px">☀️ 라이트</div>
+        <div style="background:#1a1a2e;color:#fff;border-radius:6px;padding:6px 10px;font-size:11px">🌙 다크</div>
+        <div style="width:32px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2)"></div>
+      </div>
+      <p>다크모드 지원 포함. 가장 유연하지만 구현 복잡도 높음.</p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:16px;background:#fff8e1;border-radius:8px;padding:12px;font-size:13px">
+  <strong>💡 추천:</strong> B안 — 프리셋으로 빠르게 선택하되, 고객사 브랜드 컬러가 있으면 정확히 맞출 수 있어 대행 서비스에 딱 맞습니다.
+</div>

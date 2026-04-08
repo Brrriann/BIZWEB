@@ -11,6 +11,7 @@ export default function AdminPage() {
   const [showNew, setShowNew] = useState(false)
   const [newSlug, setNewSlug] = useState('')
   const [newName, setNewName] = useState('')
+  const [error, setError] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -19,13 +20,18 @@ export default function AdminPage() {
 
   async function createCard(e: React.FormEvent) {
     e.preventDefault()
+    setError('')
     const res = await fetch('/api/admin/cards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ slug: newSlug, name: newName }),
     })
     const card = await res.json()
-    if (res.ok) router.push(`/admin/${card.id}`)
+    if (res.ok) {
+      router.push(`/admin/${card.id}`)
+    } else {
+      setError(card.error || '생성 실패')
+    }
   }
 
   async function logout() {
@@ -48,8 +54,8 @@ export default function AdminPage() {
 
       {showNew && (
         <form onSubmit={createCard} className="bg-gray-50 rounded-2xl p-4 mb-4 flex gap-3">
-          <input value={newSlug} onChange={e => setNewSlug(e.target.value.toLowerCase())}
-            placeholder="slug (영문)" required
+          <input value={newSlug} onChange={e => setNewSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+            placeholder="slug (영문, 예: hong-gildong)" required
             className="border border-gray-200 rounded-xl px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           <input value={newName} onChange={e => setNewName(e.target.value)}
             placeholder="이름" required
@@ -57,6 +63,7 @@ export default function AdminPage() {
           <button type="submit" className="bg-blue-600 text-white rounded-xl px-4 py-2 text-sm">생성</button>
           <button type="button" onClick={() => setShowNew(false)} className="text-gray-400 text-sm px-2">취소</button>
         </form>
+        {error && <p className="text-red-500 text-sm mb-4 px-1">{error}</p>}
       )}
 
       <div className="flex flex-col gap-2">
