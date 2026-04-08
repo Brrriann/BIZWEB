@@ -1,15 +1,17 @@
 // components/card/SocialLinks.tsx
+import { MessageCircle, Camera, Play, BookOpen, Globe, AtSign, Music, Link, ChevronRight } from 'lucide-react'
 import type { SocialLink } from '@/lib/types'
+import type { LucideIcon } from 'lucide-react'
 
-const PLATFORM_ICONS: Record<string, { icon: string; label: string }> = {
-  kakao:     { icon: '💬', label: '카카오톡' },
-  instagram: { icon: '📷', label: '인스타그램' },
-  youtube:   { icon: '▶️', label: '유튜브' },
-  naver:     { icon: '🟢', label: '네이버 블로그' },
-  facebook:  { icon: '🔵', label: '페이스북' },
-  twitter:   { icon: '🐦', label: 'X(트위터)' },
-  tiktok:    { icon: '🎵', label: '틱톡' },
-  link:      { icon: '🔗', label: '링크' },
+const PLATFORM_META: Record<string, { icon: LucideIcon; label: string }> = {
+  kakao:     { icon: MessageCircle, label: '카카오톡' },
+  instagram: { icon: Camera,        label: '인스타그램' },
+  youtube:   { icon: Play,          label: '유튜브' },
+  naver:     { icon: BookOpen,      label: '네이버 블로그' },
+  facebook:  { icon: Globe,          label: '페이스북' },
+  twitter:   { icon: AtSign,        label: 'X(트위터)' },
+  tiktok:    { icon: Music,         label: '틱톡' },
+  link:      { icon: Link,          label: '링크' },
 }
 
 interface Props { links: SocialLink[]; themeColor?: string }
@@ -26,7 +28,8 @@ export function SocialLinks({ links }: Props) {
       </h2>
       <div className="flex flex-col gap-2">
         {links.map(link => {
-          const meta = PLATFORM_ICONS[link.platform] ?? PLATFORM_ICONS.link
+          const meta = PLATFORM_META[link.platform] ?? PLATFORM_META.link
+          const Icon = meta.icon
           return (
             <a
               key={link.id}
@@ -39,9 +42,11 @@ export function SocialLinks({ links }: Props) {
                 border: '1px solid var(--border)',
               }}
             >
-              <span className="text-xl w-8 text-center">{meta.icon}</span>
+              <div className="w-8 flex justify-center" style={{ color: 'var(--text-muted)' }}>
+                <Icon size={20} strokeWidth={1.5} />
+              </div>
               <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{meta.label}</span>
-              <span className="ml-auto text-xs" style={{ color: 'var(--accent)' }}>→</span>
+              <ChevronRight size={16} strokeWidth={1.5} className="ml-auto" style={{ color: 'var(--accent)' }} />
             </a>
           )
         })}

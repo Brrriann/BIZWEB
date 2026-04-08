@@ -47,7 +47,12 @@
       "Bash(python -c \"import sys,json; r=json.load\\(sys.stdin\\); print\\(''''OK''''\\) if r.get\\(''''success''''\\) else print\\(''''FAIL:'''', r.get\\(''''errors''''\\)\\)\")",
       "Read(//c//**)",
       "Bash(do npx:*)",
-      "Bash(export CLOUDFLARE_API_TOKEN=\"9aEFvnlyb2oB7PXShxeE9U2RaHQCmhLAFfb7TDHFzW0.mtykYgpUEVSWwSUZouarsCCa9FmTuUpfl0W22fb97CM\")"
+      "Bash(export CLOUDFLARE_API_TOKEN=\"9aEFvnlyb2oB7PXShxeE9U2RaHQCmhLAFfb7TDHFzW0.mtykYgpUEVSWwSUZouarsCCa9FmTuUpfl0W22fb97CM\")",
+      "Bash(grep -r \"compress\\\\|resize\\\\|sharp\\\\|image\" /c/BIZWEB/app /c/BIZWEB/lib --include=*.ts --include=*.tsx --include=*.js)",
+      "Bash(find /c/BIZWEB -maxdepth 2 -type f \\\\\\(-name wrangler.toml -o -name .env* -o -name supabase.json \\\\\\))",
+      "Bash(npx next:*)",
+      "Bash(ls -la /c/BIZWEB/app/*.tsx /c/BIZWEB/components/card/ /c/BIZWEB/components/admin/)",
+      "Bash(node -e \"const l = require\\(''''lucide-react''''\\); const names = Object.keys\\(l\\).filter\\(k => typeof l[k] === ''''object'''' && k.match\\(/^[A-Z]/\\)\\).join\\(''''\\\\n''''\\); console.log\\(names\\)\")"
     ]
   }
 }

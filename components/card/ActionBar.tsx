@@ -1,5 +1,6 @@
 // components/card/ActionBar.tsx
 'use client'
+import { Phone, MessageSquare, Download, QrCode } from 'lucide-react'
 import { generateVCF } from '@/lib/vcf'
 import type { Card } from '@/lib/types'
 
@@ -22,15 +23,16 @@ export function ActionBar({ card, onQR }: Props) {
   }
 
   const actions = [
-    card.phone && { icon: '📞', label: '전화', href: `tel:${card.phone}` },
-    card.phone && { icon: '💬', label: '문자', href: `sms:${card.phone}` },
-    { icon: '💾', label: '저장', onClick: downloadVCF },
-    { icon: '📱', label: 'QR', onClick: onQR },
-  ].filter(Boolean) as { icon: string; label: string; href?: string; onClick?: () => void }[]
+    card.phone && { icon: Phone, label: '전화', href: `tel:${card.phone}` },
+    card.phone && { icon: MessageSquare, label: '문자', href: `sms:${card.phone}` },
+    { icon: Download, label: '저장', onClick: downloadVCF },
+    { icon: QrCode, label: 'QR', onClick: onQR },
+  ].filter(Boolean) as { icon: typeof Phone; label: string; href?: string; onClick?: () => void }[]
 
   return (
     <div className="px-4 pb-5 flex gap-2">
       {actions.map(action => {
+        const Icon = action.icon
         const className = "flex flex-col items-center gap-1.5 flex-1 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:scale-105 active:scale-95"
         const style = {
           backgroundColor: 'var(--bg-elevated)',
@@ -43,13 +45,13 @@ export function ActionBar({ card, onQR }: Props) {
         if (action.href) {
           return (
             <a key={action.label} href={action.href} className={className} style={style}>
-              <span className="text-lg">{action.icon}</span>{action.label}
+              <Icon size={20} strokeWidth={1.5} />{action.label}
             </a>
           )
         }
         return (
           <button key={action.label} onClick={action.onClick} className={className} style={style}>
-            <span className="text-lg">{action.icon}</span>{action.label}
+            <Icon size={20} strokeWidth={1.5} />{action.label}
           </button>
         )
       })}

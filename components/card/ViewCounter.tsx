@@ -1,6 +1,7 @@
 // components/card/ViewCounter.tsx
 'use client'
 import { useEffect, useState } from 'react'
+import { Eye } from 'lucide-react'
 
 interface Props { cardId: string; initialCount: number }
 
@@ -20,8 +21,9 @@ export function ViewCounter({ cardId, initialCount }: Props) {
 
   return (
     <div className="px-4 pb-6 text-center">
-      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-        👁 {count.toLocaleString()}명이 방문했습니다
+      <p className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--text-muted)' }}>
+        <Eye size={14} strokeWidth={1.5} />
+        {count.toLocaleString()}명이 방문했습니다
       </p>
     </div>
   )

@@ -1,4 +1,5 @@
 // components/card/HeroSection.tsx
+import { User } from 'lucide-react'
 import Image from 'next/image'
 
 interface Props {
@@ -12,7 +13,6 @@ interface Props {
 export function HeroSection({ name, title, company, profileImageUrl, themeColor }: Props) {
   return (
     <div className="relative">
-      {/* Hero gradient with theme color */}
       <div
         className="h-36 w-full"
         style={{
@@ -32,7 +32,9 @@ export function HeroSection({ name, title, company, profileImageUrl, themeColor 
             {profileImageUrl ? (
               <Image src={profileImageUrl} alt={name} width={96} height={96} className="object-cover w-full h-full" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-3xl" style={{ color: 'var(--text-muted)' }}>👤</div>
+              <div className="w-full h-full flex items-center justify-center" style={{ color: 'var(--text-muted)' }}>
+                <User size={36} strokeWidth={1.5} />
+              </div>
             )}
           </div>
           <div className="pb-2">
