@@ -8,8 +8,8 @@ export default function PrivacyPage() {
       <div className="space-y-6">
         <section>
           <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>1. 수집하는 개인정보 항목</h2>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>마이네임이즈는 디지털 명함 서비스 제공을 위해 다음 정보를 수집합니다.</p>
-          <ul className="list-disc pl-5 space-y-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>마그네이트코리아는 디지털 명함 서비스 제공을 위해 다음 정보를 수집합니다.</p>
+          <ul className="list-disc pl-5 space-y-1 text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
             <li>성명, 직함, 소속회사</li>
             <li>전화번호, 이메일 주소</li>
             <li>주소, 홈페이지 URL</li>
@@ -38,7 +38,9 @@ export default function PrivacyPage() {
         </section>
         <section>
           <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>7. 개인정보 보호책임자</h2>
-          <p className="text-sm">이메일: <a href="mailto:admin@mynameiz.com" style={{ color: 'var(--accent)' }}>admin@mynameiz.com</a></p>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>회사명: 마그네이트코리아</p>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>개인정보처리책임자: 김나윤</p>
+          <p className="text-sm">이메일: <a href="mailto:official@magnatekorea.com" style={{ color: 'var(--accent)' }}>official@magnatekorea.com</a></p>
         </section>
         <p className="text-xs mt-8" style={{ color: 'var(--text-muted)' }}>시행일: 2026년 4월 7일</p>
       </div>
