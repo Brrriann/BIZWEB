@@ -84,7 +84,6 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
           { label: '회사', field: 'company' },
           { label: '전화번호', field: 'phone' },
           { label: '이메일', field: 'email', type: 'email' },
-          { label: '홈페이지', field: 'website' },
         ].map(({ label, field, required, type }) => (
           <div key={field}>
             <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>{label}</label>
@@ -129,7 +128,17 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
 
       <hr style={{ borderColor: 'var(--border)' }} />
 
-      {/* SNS */}
+      {/* 서비스 링크 */}
+      <div>
+        <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>섹션 타이틀</label>
+        <input
+          value={form.social_links_title ?? ''}
+          onChange={e => update('social_links_title', e.target.value)}
+          placeholder="Our Service"
+          className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 mb-4"
+          style={inputStyle}
+        />
+      </div>
       <SocialLinksEditor cardId={card.id} links={socialLinks} onUpdate={onRefresh} />
 
       <hr style={{ borderColor: 'var(--border)' }} />

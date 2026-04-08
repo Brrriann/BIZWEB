@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import type { SocialLink } from '@/lib/types'
 
-const PLATFORMS = ['kakao','instagram','youtube','naver','facebook','twitter','tiktok','link']
+const PLATFORMS = ['website','kakao','instagram','youtube','naver','facebook','twitter','tiktok','link']
 
 interface Props {
   cardId: string

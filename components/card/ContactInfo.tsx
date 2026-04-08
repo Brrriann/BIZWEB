@@ -1,5 +1,5 @@
 // components/card/ContactInfo.tsx
-import { Phone, Mail, MapPin, Globe } from 'lucide-react'
+import { Phone, Mail, MapPin } from 'lucide-react'
 import type { Card } from '@/lib/types'
 
 interface Props { card: Card }
@@ -9,7 +9,6 @@ export function ContactInfo({ card }: Props) {
     card.phone   && { icon: Phone,  label: '전화', value: card.phone,   href: `tel:${card.phone}` },
     card.email   && { icon: Mail,   label: '이메일', value: card.email,  href: `mailto:${card.email}` },
     card.address && { icon: MapPin,  label: '주소',   value: card.address, href: `https://map.naver.com/search?query=${encodeURIComponent(card.address)}` },
-    card.website && { icon: Globe,  label: '홈페이지', value: card.website, href: card.website },
   ].filter(Boolean) as { icon: typeof Phone; label: string; value: string; href: string }[]
 
   if (!items.length && !card.bio) return null

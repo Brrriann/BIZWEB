@@ -12,6 +12,7 @@ export interface Card {
   bio?: string
   profile_image_url?: string
   theme_color: string
+  social_links_title?: string
   is_active: boolean
 }
 

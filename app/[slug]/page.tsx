@@ -60,9 +60,9 @@ export default async function CardPage({ params }: Props) {
         profileImageUrl={card.profile_image_url} themeColor={card.theme_color}
       />
       <ActionBarWrapper card={card} pageUrl={pageUrl} />
-      <SocialLinks links={socialLinks} themeColor={card.theme_color} />
       <ContactInfo card={card} />
       <Gallery images={galleryImages} />
+      <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
       <ViewCounter cardId={card.id} initialCount={viewCount} />
       <footer className="text-center pb-8 pt-2">
         <Link

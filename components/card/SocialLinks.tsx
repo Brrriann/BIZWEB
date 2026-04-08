@@ -8,15 +8,19 @@ const PLATFORM_META: Record<string, { icon: LucideIcon; label: string }> = {
   instagram: { icon: Camera,        label: '인스타그램' },
   youtube:   { icon: Play,          label: '유튜브' },
   naver:     { icon: BookOpen,      label: '네이버 블로그' },
-  facebook:  { icon: Globe,          label: '페이스북' },
+  facebook:  { icon: Globe,         label: '페이스북' },
   twitter:   { icon: AtSign,        label: 'X(트위터)' },
   tiktok:    { icon: Music,         label: '틱톡' },
+  website:   { icon: Globe,         label: '홈페이지' },
   link:      { icon: Link,          label: '링크' },
 }
 
-interface Props { links: SocialLink[]; themeColor?: string }
+interface Props {
+  links: SocialLink[]
+  sectionTitle?: string
+}
 
-export function SocialLinks({ links }: Props) {
+export function SocialLinks({ links, sectionTitle }: Props) {
   if (!links.length) return null
   return (
     <div className="px-4 pb-5">
@@ -24,7 +28,7 @@ export function SocialLinks({ links }: Props) {
         className="text-xs font-bold uppercase tracking-wider mb-3"
         style={{ color: 'var(--text-muted)', letterSpacing: '0.15em' }}
       >
-        소셜 미디어
+        {sectionTitle || 'Our Service'}
       </h2>
       <div className="flex flex-col gap-2">
         {links.map(link => {
