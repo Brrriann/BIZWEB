@@ -21,11 +21,12 @@ export function SocialLinksEditor({ cardId, links, onUpdate }: Props) {
   async function addLink() {
     if (!url) return
     setLoading(true)
+    const normalizedUrl = url.match(/^https?:\/\//) ? url : `https://${url}`
     try {
       const res = await fetch(`/api/admin/cards/${cardId}/social-links`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform, url, label: label || undefined, sort_order: links.length }),
+        body: JSON.stringify({ platform, url: normalizedUrl, label: label || undefined, sort_order: links.length }),
       })
       if (!res.ok) throw new Error('추가 실패')
       setUrl('')

@@ -34,10 +34,11 @@ export function SocialLinks({ links, sectionTitle }: Props) {
         {links.map(link => {
           const meta = PLATFORM_META[link.platform] ?? PLATFORM_META.link
           const Icon = meta.icon
+          const href = link.url && !link.url.match(/^https?:\/\//) ? `https://${link.url}` : link.url
           return (
             <a
               key={link.id}
-              href={link.url}
+              href={href}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02]"
