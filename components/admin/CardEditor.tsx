@@ -1,7 +1,8 @@
 // components/admin/CardEditor.tsx
 'use client'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Image from 'next/image'
+import { ScanLine } from 'lucide-react'
 import { ThemePicker } from './ThemePicker'
 import { SocialLinksEditor } from './SocialLinksEditor'
 import { GalleryEditor } from './GalleryEditor'
@@ -20,10 +21,56 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [uploadingProfile, setUploadingProfile] = useState(false)
+  const [scanning, setScanning] = useState(false)
+  const [scanError, setScanError] = useState('')
+  const scanInputRef = useRef<HTMLInputElement>(null)
 
   function update(field: string, value: string | boolean) {
     setForm(prev => ({ ...prev, [field]: value }))
     setSaved(false)
+  }
+
+  async function scanBusinessCard(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setScanning(true)
+    setScanError('')
+    try {
+      const reader = new FileReader()
+      const base64 = await new Promise<string>((resolve, reject) => {
+        reader.onload = () => {
+          const result = reader.result as string
+          resolve(result.split(',')[1])
+        }
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+      const res = await fetch('/api/admin/ocr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: base64, mimeType: file.type }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'OCR 실패')
+      setForm(prev => ({
+        ...prev,
+        ...(data.name && { name: data.name }),
+        ...(data.title && { title: data.title }),
+        ...(data.company && { company: data.company }),
+        ...(data.phone && { phone: data.phone }),
+        ...(data.email && { email: data.email }),
+        ...(data.address && { address: data.address }),
+      }))
+      setSaved(false)
+      if (data.website) {
+        setScanError(`✓ 스캔 완료! 웹사이트: ${data.website} (서비스 링크에 직접 추가해주세요)`)
+      }
+    } catch (err) {
+      setScanError(err instanceof Error ? err.message : 'OCR 실패')
+    } finally {
+      setScanning(false)
+      if (scanInputRef.current) scanInputRef.current.value = ''
+    }
   }
 
   async function uploadProfile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -74,6 +121,20 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
             <input type="file" accept="image/*" onChange={uploadProfile} disabled={uploadingProfile} className="hidden" />
           </label>
         </div>
+      </div>
+
+      {/* 명함 OCR 스캔 */}
+      <div>
+        <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>명함 스캔 (AI 자동 입력)</label>
+        <label className="cursor-pointer inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold transition-all hover:scale-[1.02]"
+          style={{ backgroundColor: scanning ? 'var(--bg-elevated)' : 'var(--bg-surface)', border: '1px solid var(--border)', color: scanning ? 'var(--text-muted)' : 'var(--accent)' }}>
+          <ScanLine size={16} strokeWidth={1.5} />
+          {scanning ? '스캔 중...' : '명함 이미지 업로드'}
+          <input ref={scanInputRef} type="file" accept="image/*" onChange={scanBusinessCard} disabled={scanning} className="hidden" />
+        </label>
+        {scanError && (
+          <p className="mt-2 text-xs" style={{ color: scanError.startsWith('✓') ? 'var(--accent)' : '#f3727f' }}>{scanError}</p>
+        )}
       </div>
 
       {/* 기본 정보 */}
