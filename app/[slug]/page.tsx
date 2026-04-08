@@ -1,0 +1,66 @@
+// app/[slug]/page.tsx
+export const runtime = 'edge'
+export const dynamicParams = true
+
+import { notFound } from 'next/navigation'
+import { getSupabaseServer } from '@/lib/supabase'
+import { HeroSection } from '@/components/card/HeroSection'
+import { ActionBarWrapper } from '@/components/card/ActionBarWrapper'
+import { SocialLinks } from '@/components/card/SocialLinks'
+import { ContactInfo } from '@/components/card/ContactInfo'
+import { Gallery } from '@/components/card/Gallery'
+import { ViewCounter } from '@/components/card/ViewCounter'
+import type { Metadata } from 'next'
+
+interface Props { params: Promise<{ slug: string }> }
+
+async function getCardData(slug: string) {
+  const supabase = getSupabaseServer()
+  const { data: card } = await supabase
+    .from('cards').select('*').eq('slug', slug).eq('is_active', true).single()
+  if (!card) return null
+
+  const [{ data: socialLinks }, { data: galleryImages }, { count }] = await Promise.all([
+    supabase.from('social_links').select('*').eq('card_id', card.id).order('sort_order'),
+    supabase.from('gallery_images').select('*').eq('card_id', card.id).order('sort_order'),
+    supabase.from('page_views').select('*', { count: 'exact', head: true }).eq('card_id', card.id),
+  ])
+
+  return { card, socialLinks: socialLinks ?? [], galleryImages: galleryImages ?? [], viewCount: count ?? 0 }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const data = await getCardData(slug)
+  if (!data) return { title: '페이지를 찾을 수 없습니다' }
+  return {
+    title: `${data.card.name} | 마이네임이즈`,
+    description: data.card.bio ?? `${data.card.name}의 디지털 명함`,
+  }
+}
+
+export default async function CardPage({ params }: Props) {
+  const { slug } = await params
+  const data = await getCardData(slug)
+  if (!data) notFound()
+
+  const { card, socialLinks, galleryImages, viewCount } = data
+  const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`
+
+  return (
+    <main className="min-h-screen bg-white max-w-md mx-auto">
+      <HeroSection
+        name={card.name} title={card.title} company={card.company}
+        profileImageUrl={card.profile_image_url} themeColor={card.theme_color}
+      />
+      <ActionBarWrapper card={card} pageUrl={pageUrl} />
+      <SocialLinks links={socialLinks} themeColor={card.theme_color} />
+      <ContactInfo card={card} />
+      <Gallery images={galleryImages} />
+      <ViewCounter cardId={card.id} initialCount={viewCount} />
+      <footer className="text-center pb-8 pt-2">
+        <a href="/privacy" className="text-xs text-gray-300 hover:text-gray-400">개인정보처리방침</a>
+      </footer>
+    </main>
+  )
+}
