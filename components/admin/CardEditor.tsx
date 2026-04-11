@@ -268,6 +268,40 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
         </div>
       </div>
 
+      {/* 인트로 애니메이션 */}
+      <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+        <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>인트로 애니메이션</label>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>방문자가 카드를 처음 열 때 한 번만 재생됩니다.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+          {[
+            { key: null, label: '없음', icon: '✕' },
+            { key: 'fade', label: '페이드', icon: '✦' },
+            { key: 'slide', label: '슬라이드', icon: '▲' },
+            { key: 'typewriter', label: '타이핑', icon: 'Aa' },
+            { key: 'particles', label: '파티클', icon: '✦✦' },
+            { key: 'wave', label: '웨이브', icon: '〜' },
+          ].map(({ key, label, icon }) => (
+            <button
+              key={String(key)}
+              type="button"
+              onClick={() => update('intro_animation', key ?? '')}
+              style={{
+                padding: '12px 8px',
+                borderRadius: 12,
+                border: `2px solid ${(form.intro_animation ?? '') === (key ?? '') ? 'var(--accent)' : 'var(--border)'}`,
+                background: (form.intro_animation ?? '') === (key ?? '') ? 'rgba(30,215,96,0.1)' : 'var(--bg-elevated)',
+                color: 'var(--text-primary)',
+                cursor: 'pointer',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: 20, marginBottom: 4 }}>{icon}</div>
+              <div style={{ fontSize: 11, fontWeight: 600 }}>{label}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* 다국어 설정 */}
       <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
         <label className="block text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>다국어 설정</label>

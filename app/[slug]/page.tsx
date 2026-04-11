@@ -11,6 +11,7 @@ import { ViewCounter } from '@/components/card/ViewCounter'
 import { ThemeToggle } from '@/components/card/ThemeToggle'
 import { StatusBadge } from '@/components/card/StatusBadge'
 import { CardWithLang } from '@/components/card/CardWithLang'
+import { IntroAnimation } from '@/components/card/IntroAnimation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -54,6 +55,14 @@ export default async function CardPage({ params }: Props) {
       className="min-h-screen max-w-md mx-auto relative"
       style={{ backgroundColor: 'var(--bg-base)', transition: 'background-color 0.3s ease' }}
     >
+      {card.intro_animation && (
+        <IntroAnimation
+          preset={card.intro_animation}
+          cardName={card.name}
+          themeColor={card.theme_color}
+          slug={card.slug}
+        />
+      )}
       <ThemeToggle />
       <CardWithLang card={card} />
       <StatusBadge
