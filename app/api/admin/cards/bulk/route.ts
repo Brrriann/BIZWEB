@@ -1,4 +1,5 @@
 // app/api/admin/cards/bulk/route.ts
+export const runtime = 'edge'
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/admin-auth'
 import { getSupabaseServer } from '@/lib/supabase'
