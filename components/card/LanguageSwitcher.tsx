@@ -40,7 +40,7 @@ export function LanguageSwitcher({ supported, current, onChange }: Props) {
 
   return (
     <div
-      className="absolute top-14 left-3 flex gap-1 z-10"
+      className="fixed top-4 left-4 flex gap-1 z-50"
       aria-label="언어 선택"
     >
       {supported.map(lang => (
@@ -48,11 +48,12 @@ export function LanguageSwitcher({ supported, current, onChange }: Props) {
           key={lang}
           type="button"
           onClick={() => handleChange(lang)}
-          className="rounded-full px-2.5 py-1 text-xs font-semibold transition-all hover:scale-105"
+          className="w-10 h-10 rounded-full text-xs font-bold transition-all hover:scale-110 active:scale-95"
           style={{
             backgroundColor: active === lang ? 'var(--accent)' : 'var(--bg-elevated)',
             color: active === lang ? '#000' : 'var(--text-muted)',
             border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow-card)',
           }}
         >
           {LANG_LABELS[lang] ?? lang.toUpperCase()}

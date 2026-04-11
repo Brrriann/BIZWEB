@@ -36,14 +36,19 @@ export function InlineStatusBadge({ slug, initialStatus, hasPIN }: Props) {
     else setShowPicker(true)
   }, [hasPIN])
 
-  function handleTouchStart() { longPressTimer.current = setTimeout(openFlow, 500) }
+  // Touch: long press (600ms). preventDefault stops scroll/context-menu interference.
+  function handleTouchStart(e: React.TouchEvent) {
+    e.preventDefault()
+    longPressTimer.current = setTimeout(() => { openFlow() }, 600)
+  }
   function handleTouchEnd() {
     if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null }
   }
-  function handleClick() {
-    const now = Date.now()
-    if (now - lastTapRef.current < 350) openFlow()
-    lastTapRef.current = now
+  // Mouse (desktop): single click
+  function handleClick(e: React.MouseEvent) {
+    // Only fire for mouse clicks, not synthetic clicks from touch
+    if (e.detail === 0) return // programmatic click
+    openFlow()
   }
 
   async function submitPIN() {
@@ -81,10 +86,19 @@ export function InlineStatusBadge({ slug, initialStatus, hasPIN }: Props) {
       <button
         type="button"
         className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold select-none transition-transform active:scale-95"
-        style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
-        onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onTouchCancel={handleTouchEnd}
+        style={{
+          backgroundColor: 'var(--bg-elevated)',
+          border: '1px solid var(--border)',
+          color: 'var(--text-secondary)',
+          touchAction: 'none',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         onClick={handleClick}
-        title={hasPIN ? '더블탭·길게눌러 변경' : undefined}
+        title={hasPIN ? '길게 눌러 변경' : undefined}
       >
         {cfg.emoji} {cfg.label}
       </button>
