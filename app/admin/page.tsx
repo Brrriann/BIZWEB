@@ -4,8 +4,9 @@ export const runtime = 'edge'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import type { Card } from '@/lib/types'
-import BulkImport from '@/components/admin/BulkImport'
+const BulkImport = dynamic(() => import('@/components/admin/BulkImport'), { ssr: false })
 
 export default function AdminPage() {
   const [cards, setCards] = useState<Card[]>([])

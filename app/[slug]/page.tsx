@@ -4,15 +4,17 @@ export const dynamicParams = true
 
 import { notFound } from 'next/navigation'
 import { getSupabaseServer } from '@/lib/supabase'
+import dynamic from 'next/dynamic'
 import { ActionBarWrapper } from '@/components/card/ActionBarWrapper'
 import { SocialLinks } from '@/components/card/SocialLinks'
-import { Gallery } from '@/components/card/Gallery'
 import { ViewCounter } from '@/components/card/ViewCounter'
 import { ThemeToggle } from '@/components/card/ThemeToggle'
-import { StatusBadge } from '@/components/card/StatusBadge'
-import { CardWithLang } from '@/components/card/CardWithLang'
-import { IntroAnimation } from '@/components/card/IntroAnimation'
 import Link from 'next/link'
+
+const Gallery = dynamic(() => import('@/components/card/Gallery').then(m => m.Gallery), { ssr: false })
+const StatusBadge = dynamic(() => import('@/components/card/StatusBadge').then(m => m.StatusBadge), { ssr: false })
+const CardWithLang = dynamic(() => import('@/components/card/CardWithLang').then(m => m.CardWithLang), { ssr: false })
+const IntroAnimation = dynamic(() => import('@/components/card/IntroAnimation').then(m => m.IntroAnimation), { ssr: false })
 import type { Metadata } from 'next'
 
 interface Props { params: Promise<{ slug: string }> }
