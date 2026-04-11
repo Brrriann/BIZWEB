@@ -52,10 +52,10 @@ export function ActionBar({ card, onQR, pageUrl }: Props) {
   ].filter(Boolean) as { icon: typeof Phone; label: string; href?: string; onClick?: () => void }[]
 
   return (
-    <div className="px-4 pb-5 flex gap-2">
+    <div className="px-4 pb-5 grid grid-cols-3 gap-2">
       {actions.map(action => {
         const Icon = action.icon
-        const className = "flex flex-col items-center gap-1.5 flex-1 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:scale-105 active:scale-95"
+        const className = "flex flex-col items-center gap-1.5 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:scale-105 active:scale-95"
         const style = {
           backgroundColor: 'var(--bg-elevated)',
           color: 'var(--text-primary)',
