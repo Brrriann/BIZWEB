@@ -10,6 +10,23 @@ import { QRDownload } from './QRDownload'
 import { LanguageEditor } from './LanguageEditor'
 import type { Card, SocialLink, GalleryImage, CardTranslation, ExtraContact } from '@/lib/types'
 
+// Auto-format Korean phone number with hyphens
+function formatPhone(raw: string): string {
+  const d = raw.replace(/\D/g, '').slice(0, 11)
+  if (d.startsWith('02')) {
+    if (d.length <= 2) return d
+    if (d.length <= 6) return `${d.slice(0,2)}-${d.slice(2)}`
+    if (d.length <= 9) return `${d.slice(0,2)}-${d.slice(2,5)}-${d.slice(5)}`
+    return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`
+  }
+  if (d.length <= 3) return d
+  if (d.length <= 6) return `${d.slice(0,3)}-${d.slice(3)}`
+  if (d.length <= 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`
+  return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`
+}
+
+const PHONE_TYPES = new Set(['mobile', 'office', 'fax'])
+
 // SHA-256 hash using Web Crypto API — bcrypt is unavailable in the browser
 async function sha256(text: string): Promise<string> {
   const encoder = new TextEncoder()
@@ -181,16 +198,17 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh, onDele
           { label: '이름 *', field: 'name', required: true },
           { label: '직함', field: 'title' },
           { label: '회사', field: 'company' },
-          { label: '전화번호', field: 'phone' },
+          { label: '전화번호', field: 'phone', phone: true },
           { label: '이메일', field: 'email', type: 'email' },
-        ].map(({ label, field, required, type }) => (
+        ].map(({ label, field, required, type, phone }) => (
           <div key={field}>
             <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>{label}</label>
             <input
               type={type || 'text'}
+              inputMode={phone ? 'numeric' : undefined}
               required={required}
               value={(form as unknown as Record<string, string>)[field] ?? ''}
-              onChange={e => update(field, e.target.value)}
+              onChange={e => update(field, phone ? formatPhone(e.target.value) : e.target.value)}
               className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
               style={inputStyle}
             />
@@ -240,14 +258,16 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh, onDele
               </select>
               <input
                 type="text"
+                inputMode={PHONE_TYPES.has(contact.type) ? 'numeric' : undefined}
                 value={contact.value}
                 onChange={e => {
                   const contacts = [...(form.extra_contacts ?? [])]
-                  contacts[i] = { ...contacts[i], value: e.target.value }
+                  const val = PHONE_TYPES.has(contact.type) ? formatPhone(e.target.value) : e.target.value
+                  contacts[i] = { ...contacts[i], value: val }
                   setForm(prev => ({ ...prev, extra_contacts: contacts }))
                   setSaved(false)
                 }}
-                placeholder="번호 또는 값 입력"
+                placeholder={PHONE_TYPES.has(contact.type) ? '010-0000-0000' : '값 입력'}
                 className="flex-1 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2"
                 style={inputStyle}
               />
