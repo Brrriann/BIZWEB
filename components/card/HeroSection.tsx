@@ -4,15 +4,21 @@ import { useRef } from 'react'
 import { User } from 'lucide-react'
 import Image from 'next/image'
 
+const STATUS_CONFIG: Record<string, { emoji: string; label: string }> = {
+  online:   { emoji: '🟢', label: '온라인' },
+  vacation: { emoji: '🏖️', label: '휴가중' },
+}
+
 interface Props {
   name: string
   title?: string
   company?: string
   profileImageUrl?: string
   themeColor: string
+  status?: string
 }
 
-export function HeroSection({ name, title, company, profileImageUrl, themeColor }: Props) {
+export function HeroSection({ name, title, company, profileImageUrl, themeColor, status }: Props) {
   const imgRef = useRef<HTMLDivElement>(null)
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
@@ -61,7 +67,17 @@ export function HeroSection({ name, title, company, profileImageUrl, themeColor 
             )}
           </div>
           <div className="pb-2">
-            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{name}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{name}</h1>
+              {status && STATUS_CONFIG[status] && (
+                <span
+                  className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                  style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+                >
+                  {STATUS_CONFIG[status].emoji} {STATUS_CONFIG[status].label}
+                </span>
+              )}
+            </div>
             {title && <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{title}</p>}
             {company && (
               <p className="text-sm font-semibold" style={{ color: themeColor }}>{company}</p>

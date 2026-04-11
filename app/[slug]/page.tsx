@@ -8,7 +8,7 @@ import { ActionBarWrapper } from '@/components/card/ActionBarWrapper'
 import { SocialLinks } from '@/components/card/SocialLinks'
 import { ViewCounter } from '@/components/card/ViewCounter'
 import { ThemeToggle } from '@/components/card/ThemeToggle'
-import { Gallery, StatusBadge, CardWithLang, IntroAnimation } from '@/components/card/CardDynamicComponents'
+import { Gallery, CardWithLang, IntroAnimation } from '@/components/card/CardDynamicComponents'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -61,13 +61,8 @@ export default async function CardPage({ params }: Props) {
         />
       )}
       <ThemeToggle />
-      <ActionBarWrapper card={card} pageUrl={pageUrl} />
       <CardWithLang card={card} />
-      <StatusBadge
-        slug={card.slug}
-        initialStatus={card.status}
-        hasPIN={!!card.status_pin}
-      />
+      <ActionBarWrapper card={card} pageUrl={pageUrl} />
       <Gallery images={galleryImages} />
       <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
       <ViewCounter cardId={card.id} initialCount={viewCount} />

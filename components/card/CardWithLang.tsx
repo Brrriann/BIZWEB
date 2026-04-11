@@ -47,6 +47,7 @@ export function CardWithLang({ card }: Props) {
         company={mergedCard.company}
         profileImageUrl={mergedCard.profile_image_url}
         themeColor={mergedCard.theme_color}
+        status={mergedCard.status}
       />
       <ContactInfo card={mergedCard} />
     </div>
