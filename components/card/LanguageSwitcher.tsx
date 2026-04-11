@@ -9,9 +9,9 @@ interface Props {
 }
 
 const LANG_LABELS: Record<string, string> = {
-  ko: '한국어',
-  en: 'EN',
-  ja: '日本語',
+  ko: '🇰🇷',
+  en: '🇺🇸',
+  ja: '🇯🇵',
 }
 
 export function LanguageSwitcher({ supported, current, onChange }: Props) {
@@ -48,7 +48,7 @@ export function LanguageSwitcher({ supported, current, onChange }: Props) {
           key={lang}
           type="button"
           onClick={() => handleChange(lang)}
-          className="w-10 h-10 rounded-full text-xs font-bold transition-all hover:scale-110 active:scale-95"
+          className="w-10 h-10 rounded-full text-xl transition-all hover:scale-110 active:scale-95"
           style={{
             backgroundColor: active === lang ? 'var(--accent)' : 'var(--bg-elevated)',
             color: active === lang ? '#000' : 'var(--text-muted)',

@@ -60,31 +60,17 @@ const KEYFRAMES = `
 }
 `
 
-export function IntroAnimation({ preset, cardName, themeColor, slug }: Props) {
-  const storageKey = `intro_played_${slug}`
-
-  // Check sessionStorage synchronously — if already played, skip rendering entirely.
-  const [played, setPlayed] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false
-    return sessionStorage.getItem(storageKey) === '1'
-  })
-
-  // Phase: 'in' = animation showing, 'out' = fading overlay out
+export function IntroAnimation({ preset, cardName, themeColor }: Props) {
+  const [played, setPlayed] = useState(false)
   const [phase, setPhase] = useState<'in' | 'out'>('in')
-
-  // Typewriter state
   const [typedText, setTypedText] = useState('')
   const [typingDone, setTypingDone] = useState(false)
-
-  // Slide phase: 'up' = sliding in, 'down' = sliding away
   const [slidePhase, setSlidePhase] = useState<'up' | 'down'>('up')
 
   const dismiss = useCallback(() => {
     setPhase('out')
-    sessionStorage.setItem(storageKey, '1')
-    // After CSS fade-out transition completes, unmount
     setTimeout(() => setPlayed(true), 500)
-  }, [storageKey])
+  }, [])
 
   useEffect(() => {
     if (played) return

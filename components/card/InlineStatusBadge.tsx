@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 
 type Status = 'online' | 'vacation'
 
@@ -28,7 +28,7 @@ export function InlineStatusBadge({ slug, initialStatus, hasPIN }: Props) {
   const [loading, setLoading] = useState(false)
   const verifiedPinRef = useRef('')
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const lastTapRef = useRef(0)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const openFlow = useCallback(() => {
     if (!hasPIN) return
@@ -36,20 +36,32 @@ export function InlineStatusBadge({ slug, initialStatus, hasPIN }: Props) {
     else setShowPicker(true)
   }, [hasPIN])
 
-  // Touch: long press (600ms). preventDefault stops scroll/context-menu interference.
-  function handleTouchStart(e: React.TouchEvent) {
-    e.preventDefault()
-    longPressTimer.current = setTimeout(() => { openFlow() }, 600)
-  }
-  function handleTouchEnd() {
-    if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null }
-  }
-  // Mouse (desktop): single click
-  function handleClick(e: React.MouseEvent) {
-    // Only fire for mouse clicks, not synthetic clicks from touch
-    if (e.detail === 0) return // programmatic click
-    openFlow()
-  }
+  // Native non-passive touch listeners — React's synthetic touch events are passive
+  // and cannot call preventDefault(), causing scroll to cancel our long press.
+  useEffect(() => {
+    const el = buttonRef.current
+    if (!el) return
+
+    const onTouchStart = (e: TouchEvent) => {
+      e.preventDefault() // blocks scroll + context menu during hold
+      longPressTimer.current = setTimeout(openFlow, 600)
+    }
+    const onTouchEnd = () => {
+      if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null }
+    }
+
+    el.addEventListener('touchstart', onTouchStart, { passive: false })
+    el.addEventListener('touchend', onTouchEnd)
+    el.addEventListener('touchcancel', onTouchEnd)
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchend', onTouchEnd)
+      el.removeEventListener('touchcancel', onTouchEnd)
+    }
+  }, [openFlow])
+
+  // Desktop: single click
+  function handleClick() { openFlow() }
 
   async function submitPIN() {
     setPinError(''); setLoading(true)
@@ -84,19 +96,17 @@ export function InlineStatusBadge({ slug, initialStatus, hasPIN }: Props) {
   return (
     <>
       <button
+        ref={buttonRef}
         type="button"
         className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold select-none transition-transform active:scale-95"
         style={{
           backgroundColor: 'var(--bg-elevated)',
           border: '1px solid var(--border)',
           color: 'var(--text-secondary)',
-          touchAction: 'none',
           userSelect: 'none',
           WebkitUserSelect: 'none',
-        }}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
+          WebkitTouchCallout: 'none',
+        } as React.CSSProperties}
         onClick={handleClick}
         title={hasPIN ? '길게 눌러 변경' : undefined}
       >
