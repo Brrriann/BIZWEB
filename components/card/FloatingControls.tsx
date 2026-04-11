@@ -32,7 +32,7 @@ export function FloatingControls({ supported, currentLang, onLangChange }: Props
   // Close when clicking outside
   useEffect(() => {
     if (!open) return
-    function handleClick(e: MouseEvent) {
+    function handleClick(e: Event) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false)
       }
