@@ -57,6 +57,7 @@ export default async function CardPage({ params }: Props) {
             cardName={String(card.name ?? '')}
             themeColor={String(card.theme_color ?? '#2563eb')}
             slug={String(card.slug)}
+            introText={card.intro_animation_text ? String(card.intro_animation_text) : undefined}
           />
         </IntroErrorBoundary>
       )}

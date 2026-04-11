@@ -29,6 +29,7 @@ export interface Card {
   status: 'online' | 'vacation'
   status_pin?: string
   intro_animation?: string
+  intro_animation_text?: string
   show_qr_card_cta: boolean
 }
 

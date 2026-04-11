@@ -308,6 +308,26 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh, onDele
             </button>
           ))}
         </div>
+
+        {/* 애니메이션 텍스트 — fade/typewriter에 표시 */}
+        {form.intro_animation && form.intro_animation !== 'slide' && form.intro_animation !== 'particles' && form.intro_animation !== 'wave' && (
+          <div className="mt-3">
+            <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--text-muted)' }}>
+              애니메이션 문구
+              <span className="ml-1 font-normal" style={{ color: 'var(--text-muted)' }}>
+                (비워두면 {form.intro_animation === 'typewriter' ? '이름' : '"MY NAME IS."'} 사용)
+              </span>
+            </label>
+            <input
+              type="text"
+              value={form.intro_animation_text ?? ''}
+              onChange={e => update('intro_animation_text', e.target.value)}
+              placeholder={form.intro_animation === 'typewriter' ? card.name : 'MY NAME IS.'}
+              className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+              style={inputStyle}
+            />
+          </div>
+        )}
       </div>
 
       {/* 다국어 설정 */}

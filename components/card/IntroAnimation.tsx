@@ -2,10 +2,11 @@
 import { useEffect, useState, useCallback } from 'react'
 
 interface Props {
-  preset: string      // 'fade' | 'slide' | 'typewriter' | 'particles' | 'wave'
-  cardName: string    // used by typewriter effect
-  themeColor: string  // used for accent color in animations
-  slug: string        // used for sessionStorage key
+  preset: string
+  cardName: string
+  themeColor: string
+  slug: string
+  introText?: string  // custom text overrides defaults
 }
 
 interface Particle {
@@ -60,7 +61,8 @@ const KEYFRAMES = `
 }
 `
 
-export function IntroAnimation({ preset, cardName, themeColor }: Props) {
+export function IntroAnimation({ preset, cardName, themeColor, introText }: Props) {
+  const displayText = introText?.trim() || (preset === 'typewriter' ? cardName : 'MY NAME IS.')
   const [played, setPlayed] = useState(false)
   const [phase, setPhase] = useState<'in' | 'out'>('in')
   const [typedText, setTypedText] = useState('')
@@ -79,8 +81,8 @@ export function IntroAnimation({ preset, cardName, themeColor }: Props) {
       let i = 0
       const interval = setInterval(() => {
         i++
-        setTypedText(cardName.slice(0, i))
-        if (i >= cardName.length) {
+        setTypedText(displayText.slice(0, i))
+        if (i >= displayText.length) {
           clearInterval(interval)
           setTypingDone(true)
           setTimeout(dismiss, 500)
@@ -143,7 +145,7 @@ export function IntroAnimation({ preset, cardName, themeColor }: Props) {
             textTransform: 'uppercase',
             animation: 'intro-fade-in 0.8s ease forwards',
           }}>
-            MY NAME IS.
+            {displayText}
           </span>
         </div>
       </>

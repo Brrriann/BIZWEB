@@ -33,6 +33,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
     translations: body.translations,
     status: body.status,
     intro_animation: body.intro_animation ?? null,
+    intro_animation_text: body.intro_animation_text ?? null,
     show_qr_card_cta: body.show_qr_card_cta,
     social_links_title: body.social_links_title,
   }
