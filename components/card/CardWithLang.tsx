@@ -46,7 +46,7 @@ export function CardWithLang({ card, pageUrl }: Props) {
         slug={mergedCard.slug}
         hasPIN={!!mergedCard.status_pin}
       />
-      <ContactInfo card={mergedCard} />
+      <ContactInfo card={mergedCard} lang={lang} />
       <ActionBarWrapper card={mergedCard} pageUrl={pageUrl} lang={lang} />
     </div>
   )

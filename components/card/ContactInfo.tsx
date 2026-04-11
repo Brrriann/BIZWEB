@@ -2,13 +2,20 @@
 import { Phone, Mail, MapPin } from 'lucide-react'
 import type { Card } from '@/lib/types'
 
-interface Props { card: Card }
+const LABELS: Record<string, { phone: string; email: string; address: string }> = {
+  ko: { phone: '전화',  email: '이메일', address: '주소' },
+  en: { phone: 'Phone', email: 'Email',  address: 'Address' },
+  ja: { phone: '電話',  email: 'メール', address: '住所' },
+}
 
-export function ContactInfo({ card }: Props) {
+interface Props { card: Card; lang?: string }
+
+export function ContactInfo({ card, lang = 'ko' }: Props) {
+  const t = LABELS[lang] ?? LABELS.ko
   const items = [
-    card.phone   && { icon: Phone,  label: '전화', value: card.phone,   href: `tel:${card.phone}` },
-    card.email   && { icon: Mail,   label: '이메일', value: card.email,  href: `mailto:${card.email}` },
-    card.address && { icon: MapPin,  label: '주소',   value: card.address, href: `https://map.naver.com/search?query=${encodeURIComponent(card.address)}` },
+    card.phone   && { icon: Phone,  label: t.phone,   value: card.phone,   href: `tel:${card.phone}` },
+    card.email   && { icon: Mail,   label: t.email,   value: card.email,   href: `mailto:${card.email}` },
+    card.address && { icon: MapPin, label: t.address, value: card.address, href: `https://map.naver.com/search?query=${encodeURIComponent(card.address)}` },
   ].filter(Boolean) as { icon: typeof Phone; label: string; value: string; href: string }[]
 
   if (!items.length && !card.bio) return null
