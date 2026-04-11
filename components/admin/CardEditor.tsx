@@ -7,7 +7,17 @@ import { ThemePicker } from './ThemePicker'
 import { SocialLinksEditor } from './SocialLinksEditor'
 import { GalleryEditor } from './GalleryEditor'
 import { QRDownload } from './QRDownload'
-import type { Card, SocialLink, GalleryImage } from '@/lib/types'
+import { LanguageEditor } from './LanguageEditor'
+import type { Card, SocialLink, GalleryImage, CardTranslation } from '@/lib/types'
+
+// SHA-256 hash using Web Crypto API — bcrypt is unavailable in the browser
+async function sha256(text: string): Promise<string> {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(text)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+}
 
 interface Props {
   card: Card
@@ -17,7 +27,7 @@ interface Props {
 }
 
 export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Props) {
-  const [form, setForm] = useState({ ...card })
+  const [form, setForm] = useState({ ...card, status_pin_input: '' })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [uploadingProfile, setUploadingProfile] = useState(false)
@@ -88,13 +98,26 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
   async function save(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
+
+    // Build the payload — exclude the ephemeral status_pin_input field
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { status_pin_input, ...rest } = form
+    const payload: typeof rest & { status_pin?: string } = { ...rest }
+
+    // If admin typed a new PIN, hash it with SHA-256 before saving
+    if (status_pin_input.trim()) {
+      payload.status_pin = await sha256(status_pin_input.trim())
+    }
+
     await fetch(`/api/admin/cards/${card.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     })
     setSaved(true)
     setSaving(false)
+    // Clear the PIN input after successful save
+    setForm(prev => ({ ...prev, status_pin_input: '' }))
     onRefresh()
   }
 
@@ -197,6 +220,47 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
             style={{ transform: form.show_qr_card_cta ? 'translateX(1.25rem)' : 'translateX(0.25rem)' }}
           />
         </button>
+      </div>
+
+      {/* 상태 설정 */}
+      <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+        <label className="block text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>상태 설정</label>
+
+        {/* 상태 선택 */}
+        <div className="mb-3">
+          <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-muted)' }}>현재 상태</label>
+          <select
+            value={form.status}
+            onChange={e => update('status', e.target.value)}
+            className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+            style={inputStyle}
+          >
+            <option value="online">🟢 온라인</option>
+            <option value="busy">🔴 바쁨</option>
+            <option value="meeting">🟡 미팅 중</option>
+            <option value="offline">⚫ 오프라인</option>
+          </select>
+        </div>
+
+        {/* PIN 설정 */}
+        <div>
+          <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-muted)' }}>
+            상태 변경 PIN
+            {form.status_pin && <span className="ml-2 text-[10px]" style={{ color: '#22c55e' }}>● 설정됨</span>}
+          </label>
+          <input
+            type="password"
+            inputMode="numeric"
+            value={form.status_pin_input}
+            onChange={e => update('status_pin_input', e.target.value)}
+            placeholder="PIN 설정 (4자리 숫자 권장)"
+            className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+            style={inputStyle}
+          />
+          <p className="mt-1 text-[10px]" style={{ color: 'var(--text-muted)' }}>
+            입력 시 저장할 때 SHA-256으로 암호화됩니다. 비워두면 기존 PIN이 유지됩니다.
+          </p>
+        </div>
       </div>
 
       {/* 저장 */}

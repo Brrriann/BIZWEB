@@ -4,13 +4,13 @@ export const dynamicParams = true
 
 import { notFound } from 'next/navigation'
 import { getSupabaseServer } from '@/lib/supabase'
-import { HeroSection } from '@/components/card/HeroSection'
 import { ActionBarWrapper } from '@/components/card/ActionBarWrapper'
 import { SocialLinks } from '@/components/card/SocialLinks'
-import { ContactInfo } from '@/components/card/ContactInfo'
 import { Gallery } from '@/components/card/Gallery'
 import { ViewCounter } from '@/components/card/ViewCounter'
 import { ThemeToggle } from '@/components/card/ThemeToggle'
+import { StatusBadge } from '@/components/card/StatusBadge'
+import { CardWithLang } from '@/components/card/CardWithLang'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -55,12 +55,13 @@ export default async function CardPage({ params }: Props) {
       style={{ backgroundColor: 'var(--bg-base)', transition: 'background-color 0.3s ease' }}
     >
       <ThemeToggle />
-      <HeroSection
-        name={card.name} title={card.title} company={card.company}
-        profileImageUrl={card.profile_image_url} themeColor={card.theme_color}
+      <CardWithLang card={card} />
+      <StatusBadge
+        slug={card.slug}
+        initialStatus={card.status}
+        hasPIN={!!card.status_pin}
       />
       <ActionBarWrapper card={card} pageUrl={pageUrl} />
-      <ContactInfo card={card} />
       <Gallery images={galleryImages} />
       <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
       {card.show_qr_card_cta && (
