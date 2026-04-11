@@ -40,6 +40,11 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
     setSaved(false)
   }
 
+  function updateLangs(supported: string[], translations: Record<string, CardTranslation>) {
+    setForm(prev => ({ ...prev, supported_languages: supported, translations }))
+    setSaved(false)
+  }
+
   async function scanBusinessCard(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
@@ -261,6 +266,16 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
             입력 시 저장할 때 SHA-256으로 암호화됩니다. 비워두면 기존 PIN이 유지됩니다.
           </p>
         </div>
+      </div>
+
+      {/* 다국어 설정 */}
+      <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+        <label className="block text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>다국어 설정</label>
+        <LanguageEditor
+          supported={form.supported_languages ?? ['ko']}
+          translations={form.translations ?? {}}
+          onChange={updateLangs}
+        />
       </div>
 
       {/* 저장 */}
