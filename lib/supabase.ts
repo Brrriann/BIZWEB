@@ -14,7 +14,8 @@ function ok(data: any, count?: number) {
 }
 function err(e: unknown) {
   const message = e instanceof Error ? e.message : String(e)
-  return { data: null, error: { message }, count: null }
+  const code = (e && typeof e === 'object' && 'code' in e) ? String((e as Record<string, unknown>).code) : undefined
+  return { data: null, error: { message, code }, count: null }
 }
 
 // ─── Base builder ──────────────────────────────────────────────────────────────
