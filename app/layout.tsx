@@ -4,6 +4,7 @@ import './globals.css'
 const BASE_URL = 'https://mynameis.work'
 
 export const metadata: Metadata = {
+  icons: { icon: '/favicon.svg', apple: '/favicon.svg' },
   title: 'MY NAME IS. — 디지털 명함',
   description: '링크 하나로 전달하는 나만의 디지털 명함. 다국어 지원, 실시간 상태, QR·NFC 실물 카드 제작.',
   openGraph: {
