@@ -40,7 +40,7 @@ export function LanguageSwitcher({ supported, current, onChange }: Props) {
 
   return (
     <div
-      className="absolute top-14 right-3 flex gap-1 z-10"
+      className="absolute top-14 left-3 flex gap-1 z-10"
       aria-label="언어 선택"
     >
       {supported.map(lang => (
