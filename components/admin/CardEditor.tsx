@@ -8,7 +8,7 @@ import { SocialLinksEditor } from './SocialLinksEditor'
 import { GalleryEditor } from './GalleryEditor'
 import { QRDownload } from './QRDownload'
 import { LanguageEditor } from './LanguageEditor'
-import type { Card, SocialLink, GalleryImage, CardTranslation } from '@/lib/types'
+import type { Card, SocialLink, GalleryImage, CardTranslation, ExtraContact } from '@/lib/types'
 
 // SHA-256 hash using Web Crypto API — bcrypt is unavailable in the browser
 async function sha256(text: string): Promise<string> {
@@ -202,6 +202,83 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh, onDele
         <input value={form.address ?? ''} onChange={e => update('address', e.target.value)}
           className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2" style={inputStyle} />
       </div>
+
+      {/* 추가 연락처 */}
+      <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>추가 연락처</label>
+          <button
+            type="button"
+            onClick={() => {
+              const contacts: ExtraContact[] = [...(form.extra_contacts ?? []), { type: 'office', value: '' }]
+              setForm(prev => ({ ...prev, extra_contacts: contacts }))
+              setSaved(false)
+            }}
+            className="text-xs font-bold rounded-full px-3 py-1 transition-all hover:scale-105"
+            style={{ backgroundColor: 'var(--bg-elevated)', color: 'var(--accent)', border: '1px solid var(--border)' }}
+          >+ 연락처 추가</button>
+        </div>
+        <div className="flex flex-col gap-2">
+          {(form.extra_contacts ?? []).map((contact: ExtraContact, i: number) => (
+            <div key={i} className="flex gap-2 items-center">
+              <select
+                value={contact.type}
+                onChange={e => {
+                  const contacts = [...(form.extra_contacts ?? [])]
+                  contacts[i] = { ...contacts[i], type: e.target.value as ExtraContact['type'] }
+                  setForm(prev => ({ ...prev, extra_contacts: contacts }))
+                  setSaved(false)
+                }}
+                className="rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2"
+                style={{ ...inputStyle, width: '110px', flexShrink: 0 }}
+              >
+                <option value="mobile">휴대폰</option>
+                <option value="office">일반전화</option>
+                <option value="fax">팩스</option>
+                <option value="email">이메일</option>
+                <option value="address">주소</option>
+              </select>
+              <input
+                type="text"
+                value={contact.value}
+                onChange={e => {
+                  const contacts = [...(form.extra_contacts ?? [])]
+                  contacts[i] = { ...contacts[i], value: e.target.value }
+                  setForm(prev => ({ ...prev, extra_contacts: contacts }))
+                  setSaved(false)
+                }}
+                placeholder="번호 또는 값 입력"
+                className="flex-1 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2"
+                style={inputStyle}
+              />
+              <input
+                type="text"
+                value={contact.label ?? ''}
+                onChange={e => {
+                  const contacts = [...(form.extra_contacts ?? [])]
+                  contacts[i] = { ...contacts[i], label: e.target.value }
+                  setForm(prev => ({ ...prev, extra_contacts: contacts }))
+                  setSaved(false)
+                }}
+                placeholder="라벨(선택)"
+                className="rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2"
+                style={{ ...inputStyle, width: '90px', flexShrink: 0 }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const contacts = (form.extra_contacts ?? []).filter((_: ExtraContact, j: number) => j !== i)
+                  setForm(prev => ({ ...prev, extra_contacts: contacts }))
+                  setSaved(false)
+                }}
+                className="text-sm px-2 py-2 rounded-xl transition-all hover:scale-110"
+                style={{ color: '#f3727f', flexShrink: 0 }}
+              >✕</button>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div>
         <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>소개글</label>
         <textarea value={form.bio ?? ''} onChange={e => update('bio', e.target.value)} rows={3}

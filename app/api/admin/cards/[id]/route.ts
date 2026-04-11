@@ -36,6 +36,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
     intro_animation_text: body.intro_animation_text ?? null,
     show_qr_card_cta: body.show_qr_card_cta,
     social_links_title: body.social_links_title,
+    extra_contacts: body.extra_contacts ?? [],
   }
   if (body.status_pin !== undefined) patch.status_pin = body.status_pin
   const { data, error } = await supabase.from('cards').update(patch).eq('id', id).select().single()

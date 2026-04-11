@@ -8,6 +8,12 @@ export interface CardTranslation {
   address?: string
 }
 
+export interface ExtraContact {
+  type: 'mobile' | 'office' | 'fax' | 'email' | 'address'
+  label?: string
+  value: string
+}
+
 export interface Card {
   id: string
   slug: string
@@ -31,6 +37,7 @@ export interface Card {
   intro_animation?: string
   intro_animation_text?: string
   show_qr_card_cta: boolean
+  extra_contacts?: ExtraContact[]
 }
 
 export interface SocialLink {
