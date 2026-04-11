@@ -6,7 +6,6 @@ import { notFound } from 'next/navigation'
 import { getSupabaseServer } from '@/lib/supabase'
 import { SocialLinks } from '@/components/card/SocialLinks'
 import { ViewCounter } from '@/components/card/ViewCounter'
-import { ThemeToggle } from '@/components/card/ThemeToggle'
 import { Gallery, CardWithLang, IntroAnimation } from '@/components/card/CardDynamicComponents'
 import { IntroErrorBoundary } from '@/components/card/IntroErrorBoundary'
 import Link from 'next/link'
@@ -61,7 +60,6 @@ export default async function CardPage({ params }: Props) {
           />
         </IntroErrorBoundary>
       )}
-      <ThemeToggle />
       <CardWithLang card={card} pageUrl={pageUrl} />
       <Gallery images={galleryImages} />
       <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />

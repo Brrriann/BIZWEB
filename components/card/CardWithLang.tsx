@@ -1,7 +1,7 @@
 'use client'
 // components/card/CardWithLang.tsx
 import { useState, useEffect } from 'react'
-import { LanguageSwitcher } from './LanguageSwitcher'
+import { FloatingControls } from './FloatingControls'
 import { HeroSection } from './HeroSection'
 import { ContactInfo } from './ContactInfo'
 import { ActionBarWrapper } from './ActionBarWrapper'
@@ -35,7 +35,7 @@ export function CardWithLang({ card, pageUrl }: Props) {
 
   return (
     <div className="relative">
-      <LanguageSwitcher supported={supported} current={lang} onChange={setLang} />
+      <FloatingControls supported={supported} currentLang={lang} onLangChange={setLang} />
       <HeroSection
         name={mergedCard.name}
         title={mergedCard.title}
