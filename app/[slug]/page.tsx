@@ -21,13 +21,12 @@ async function getCardData(slug: string) {
     .from('cards').select('*').eq('slug', slug).eq('is_active', true).single()
   if (!card) return null
 
-  const [{ data: socialLinks }, { data: galleryImages }, { count }] = await Promise.all([
+  const [{ data: socialLinks }, { data: galleryImages }] = await Promise.all([
     supabase.from('social_links').select('*').eq('card_id', card.id).order('sort_order'),
     supabase.from('gallery_images').select('*').eq('card_id', card.id).order('sort_order'),
-    supabase.from('page_views').select('*', { count: 'exact', head: true }).eq('card_id', card.id),
   ])
 
-  return { card, socialLinks: socialLinks ?? [], galleryImages: galleryImages ?? [], viewCount: count ?? 0 }
+  return { card, socialLinks: socialLinks ?? [], galleryImages: galleryImages ?? [] }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -45,7 +44,7 @@ export default async function CardPage({ params }: Props) {
   const data = await getCardData(slug)
   if (!data) notFound()
 
-  const { card, socialLinks, galleryImages, viewCount } = data
+  const { card, socialLinks, galleryImages } = data
   const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`
 
   return (
@@ -68,7 +67,7 @@ export default async function CardPage({ params }: Props) {
       <ActionBarWrapper card={card} pageUrl={pageUrl} />
       <Gallery images={galleryImages} />
       <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
-      <ViewCounter cardId={card.id} initialCount={viewCount} />
+      <ViewCounter />
       <footer className="text-center pb-10 pt-2 flex flex-col items-center gap-3">
         <Link
           href="/contact"
