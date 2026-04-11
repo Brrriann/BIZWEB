@@ -156,7 +156,7 @@ export default function LandingPage() {
         .bento-grid {
           display: grid;
           grid-template-columns: repeat(12, 1fr);
-          grid-template-rows: repeat(5, 120px);
+          grid-template-rows: repeat(6, 120px);
           gap: 10px;
         }
         .bento-c1 { grid-column: span 7; grid-row: span 3; }
@@ -165,6 +165,7 @@ export default function LandingPage() {
         .bento-c4 { grid-column: span 4; grid-row: span 2; }
         .bento-c5 { grid-column: span 4; grid-row: span 2; }
         .bento-c6 { grid-column: span 4; grid-row: span 2; }
+        .bento-c7 { grid-column: span 12; grid-row: span 1; }
 
         /* ── CTA banner ── */
         .cta-banner { padding: 48px 32px; border-radius: 24px; text-align: center; }
@@ -195,6 +196,7 @@ export default function LandingPage() {
           .bento-c4 { grid-column: span 1; grid-row: auto; }
           .bento-c5 { grid-column: span 1; grid-row: auto; }
           .bento-c6 { grid-column: span 2; grid-row: auto; }
+          .bento-c7 { grid-column: span 2; grid-row: auto; }
           .bento-card > div { padding: 16px; }
 
           .cta-banner { padding: 36px 20px; border-radius: 20px; }
@@ -268,7 +270,7 @@ export default function LandingPage() {
             </Reveal>
             <Reveal delay={300}>
               <div style={{ display: 'flex', gap: 28, marginTop: 36, flexWrap: 'wrap' }}>
-                {[['100+', '제작 완료'], ['7가지', '핵심 기능'], ['3개국어', '다국어 지원']].map(([n, l]) => (
+                {[['300+', '제작 완료'], ['7가지', '핵심 기능'], ['4개국어', '다국어 지원']].map(([n, l]) => (
                   <div key={l}>
                     <div style={{ fontSize: 26, fontWeight: 800, color: '#1ed760', letterSpacing: '-0.03em' }}>{n}</div>
                     <div style={{ fontSize: 12, color: '#555', marginTop: 2 }}>{l}</div>
@@ -365,6 +367,29 @@ export default function LandingPage() {
               </div>
               <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.02em' }}>다크 / 라이트</h3>
               <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6 }}>방문자가 원하는 테마로 전환.</p>
+            </BentoCard>
+          </Reveal>
+
+          <Reveal className="bento-c7" delay={210}>
+            <BentoCard glowColor="rgba(30,215,96,0.06)">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 20, height: '100%', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                  <span style={{ fontSize: 32 }}>🪪</span>
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 4 }}>
+                      실물 <span className="green">QR · NFC</span> 명함 제작
+                    </div>
+                    <p style={{ fontSize: 12, color: '#666', lineHeight: 1.6, margin: 0 }}>
+                      디지털 명함 링크가 담긴 QR코드 카드 · NFC 태그 카드를 실물로 제작합니다. 명함을 건네는 순간, 스마트폰으로 바로 연결.
+                    </p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginLeft: 'auto' }}>
+                  {['QR 인쇄 명함', 'NFC 태그 카드', '금속 / 플라스틱'].map(tag => (
+                    <div key={tag} style={{ padding: '4px 12px', borderRadius: 999, background: 'rgba(30,215,96,0.1)', border: '1px solid rgba(30,215,96,0.25)', fontSize: 11, fontWeight: 700, color: '#1ed760', whiteSpace: 'nowrap' }}>{tag}</div>
+                  ))}
+                </div>
+              </div>
             </BentoCard>
           </Reveal>
         </div>
