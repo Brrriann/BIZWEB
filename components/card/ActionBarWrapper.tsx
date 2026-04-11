@@ -5,11 +5,13 @@ import { ActionBar } from './ActionBar'
 import { QRModal } from './QRModal'
 import type { Card } from '@/lib/types'
 
-export function ActionBarWrapper({ card, pageUrl }: { card: Card; pageUrl: string }) {
+interface Props { card: Card; pageUrl: string; lang?: string }
+
+export function ActionBarWrapper({ card, pageUrl, lang }: Props) {
   const [showQR, setShowQR] = useState(false)
   return (
     <>
-      <ActionBar card={card} onQR={() => setShowQR(true)} pageUrl={pageUrl} />
+      <ActionBar card={card} onQR={() => setShowQR(true)} pageUrl={pageUrl} lang={lang} />
       {showQR && <QRModal url={pageUrl} onClose={() => setShowQR(false)} />}
     </>
   )

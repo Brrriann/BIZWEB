@@ -4,26 +4,24 @@ import { useState, useEffect } from 'react'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { HeroSection } from './HeroSection'
 import { ContactInfo } from './ContactInfo'
+import { ActionBarWrapper } from './ActionBarWrapper'
 import type { Card } from '@/lib/types'
 
 interface Props {
   card: Card
+  pageUrl: string
 }
 
-export function CardWithLang({ card }: Props) {
+export function CardWithLang({ card, pageUrl }: Props) {
   const supported = card.supported_languages?.length ? card.supported_languages : ['ko']
   const [lang, setLang] = useState('ko')
 
-  // Resolve preferred language from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('preferred_lang')
-    if (saved && supported.includes(saved)) {
-      setLang(saved)
-    }
+    if (saved && supported.includes(saved)) setLang(saved)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Build a merged card with translations applied (fall back to Korean originals)
   const translation = lang !== 'ko' ? (card.translations?.[lang] ?? {}) : {}
 
   const mergedCard: Card = {
@@ -36,11 +34,7 @@ export function CardWithLang({ card }: Props) {
 
   return (
     <div className="relative">
-      <LanguageSwitcher
-        supported={supported}
-        current={lang}
-        onChange={setLang}
-      />
+      <LanguageSwitcher supported={supported} current={lang} onChange={setLang} />
       <HeroSection
         name={mergedCard.name}
         title={mergedCard.title}
@@ -52,6 +46,7 @@ export function CardWithLang({ card }: Props) {
         hasPIN={!!mergedCard.status_pin}
       />
       <ContactInfo card={mergedCard} />
+      <ActionBarWrapper card={mergedCard} pageUrl={pageUrl} lang={lang} />
     </div>
   )
 }

@@ -4,7 +4,6 @@ export const dynamicParams = true
 
 import { notFound } from 'next/navigation'
 import { getSupabaseServer } from '@/lib/supabase'
-import { ActionBarWrapper } from '@/components/card/ActionBarWrapper'
 import { SocialLinks } from '@/components/card/SocialLinks'
 import { ViewCounter } from '@/components/card/ViewCounter'
 import { ThemeToggle } from '@/components/card/ThemeToggle'
@@ -63,8 +62,7 @@ export default async function CardPage({ params }: Props) {
         </IntroErrorBoundary>
       )}
       <ThemeToggle />
-      <CardWithLang card={card} />
-      <ActionBarWrapper card={card} pageUrl={pageUrl} />
+      <CardWithLang card={card} pageUrl={pageUrl} />
       <Gallery images={galleryImages} />
       <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
       <ViewCounter />

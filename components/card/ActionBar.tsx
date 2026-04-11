@@ -5,11 +5,18 @@ import { Phone, MessageSquare, Download, QrCode, Link, Share2 } from 'lucide-rea
 import { generateVCF } from '@/lib/vcf'
 import type { Card } from '@/lib/types'
 
-interface Props { card: Card; onQR: () => void; pageUrl: string }
+const LABELS: Record<string, Record<string, string>> = {
+  ko: { call: '전화', sms: '문자', save: '연락처저장', qr: 'QR', copy: '링크복사', copied: '복사됨!', share: '공유', shared: '공유됨!' },
+  en: { call: 'Call', sms: 'Text', save: 'Save', qr: 'QR', copy: 'Copy Link', copied: 'Copied!', share: 'Share', shared: 'Shared!' },
+  ja: { call: '電話', sms: 'SMS', save: '連絡先保存', qr: 'QR', copy: 'リンクコピー', copied: 'コピー済!', share: 'シェア', shared: 'シェア済!' },
+}
 
-export function ActionBar({ card, onQR, pageUrl }: Props) {
+interface Props { card: Card; onQR: () => void; pageUrl: string; lang?: string }
+
+export function ActionBar({ card, onQR, pageUrl, lang = 'ko' }: Props) {
   const [copied, setCopied] = useState(false)
   const [shared, setShared] = useState(false)
+  const t = LABELS[lang] ?? LABELS.ko
 
   function downloadVCF() {
     const vcf = generateVCF({
@@ -43,12 +50,12 @@ export function ActionBar({ card, onQR, pageUrl }: Props) {
   }
 
   const actions = [
-    card.phone && { icon: Phone, label: '전화', href: `tel:${card.phone}` },
-    card.phone && { icon: MessageSquare, label: '문자', href: `sms:${card.phone}` },
-    { icon: Download, label: '연락처저장', onClick: downloadVCF },
-    { icon: QrCode, label: 'QR', onClick: onQR },
-    { icon: Link, label: copied ? '복사됨!' : '링크복사', onClick: copyLink },
-    { icon: Share2, label: shared ? '공유됨!' : '공유', onClick: shareCard },
+    card.phone && { icon: Phone, label: t.call, href: `tel:${card.phone}` },
+    card.phone && { icon: MessageSquare, label: t.sms, href: `sms:${card.phone}` },
+    { icon: Download, label: t.save, onClick: downloadVCF },
+    { icon: QrCode, label: t.qr, onClick: onQR },
+    { icon: Link, label: copied ? t.copied : t.copy, onClick: copyLink },
+    { icon: Share2, label: shared ? t.shared : t.share, onClick: shareCard },
   ].filter(Boolean) as { icon: typeof Phone; label: string; href?: string; onClick?: () => void }[]
 
   return (
