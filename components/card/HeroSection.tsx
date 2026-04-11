@@ -2,7 +2,6 @@
 'use client'
 import { useRef } from 'react'
 import { User } from 'lucide-react'
-import Image from 'next/image'
 import { InlineStatusBadge } from './InlineStatusBadge'
 
 interface Props {
@@ -55,7 +54,8 @@ export function HeroSection({ name, title, company, profileImageUrl, themeColor,
             }}
           >
             {profileImageUrl ? (
-              <Image src={profileImageUrl} alt={name} width={96} height={96} className="object-cover w-full h-full" />
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profileImageUrl} alt={name} width={96} height={96} className="object-cover w-full h-full" />
             ) : (
               <div className="w-full h-full flex items-center justify-center" style={{ color: 'var(--text-muted)' }}>
                 <User size={36} strokeWidth={1.5} />
