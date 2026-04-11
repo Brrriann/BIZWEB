@@ -2,19 +2,17 @@
 
 import { useState, useRef, useCallback } from 'react'
 
-type Status = 'online' | 'busy' | 'meeting' | 'offline'
+type Status = 'online' | 'vacation'
 
 interface Props {
   slug: string
   initialStatus: Status
-  hasPIN: boolean // true if status_pin is set (non-null) on the card
+  hasPIN: boolean
 }
 
 const STATUS_CONFIG: Record<Status, { emoji: string; label: string; color: string }> = {
-  online:  { emoji: '🟢', label: '온라인',   color: '#22c55e' },
-  busy:    { emoji: '🔴', label: '바쁨',     color: '#ef4444' },
-  meeting: { emoji: '🟡', label: '미팅 중',  color: '#eab308' },
-  offline: { emoji: '⚫', label: '오프라인', color: '#6b7280' },
+  online:   { emoji: '🟢', label: '온라인', color: '#22c55e' },
+  vacation: { emoji: '🏖️', label: '휴가중', color: '#f59e0b' },
 }
 
 export function StatusBadge({ slug, initialStatus, hasPIN }: Props) {
@@ -32,7 +30,8 @@ export function StatusBadge({ slug, initialStatus, hasPIN }: Props) {
   const verifiedPinRef = useRef<string>('')
 
   const openFlow = useCallback(() => {
-    if (hasPIN && !verifiedPinRef.current) {
+    if (!hasPIN) return // PIN not set by admin — no status change allowed
+    if (!verifiedPinRef.current) {
       setShowPINModal(true)
     } else {
       setShowPicker(true)

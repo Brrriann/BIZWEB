@@ -22,10 +22,12 @@ export async function PATCH(
   const { slug } = await params
   const { pin, status } = await req.json()
 
-  const validStatuses = ['online', 'busy', 'meeting', 'offline']
+  const validStatuses = ['online', 'vacation']
   if (!validStatuses.includes(status)) {
     return NextResponse.json({ error: '유효하지 않은 상태값입니다' }, { status: 400 })
   }
+
+  if (!pin) return NextResponse.json({ error: 'PIN이 필요합니다' }, { status: 401 })
 
   const supabase = getSupabaseServer()
   const { data: card } = await supabase
@@ -37,13 +39,13 @@ export async function PATCH(
 
   if (!card) return NextResponse.json({ error: '카드를 찾을 수 없습니다' }, { status: 404 })
 
-  // If a PIN hash is stored, verify the supplied PIN
-  if (card.status_pin) {
-    if (!pin) return NextResponse.json({ error: 'PIN이 필요합니다' }, { status: 401 })
-    const pinHash = await sha256(pin)
-    if (pinHash !== card.status_pin) {
-      return NextResponse.json({ error: 'PIN이 올바르지 않습니다' }, { status: 401 })
-    }
+  if (!card.status_pin) {
+    return NextResponse.json({ error: '관리자가 PIN을 설정하지 않았습니다' }, { status: 403 })
+  }
+
+  const pinHash = await sha256(pin)
+  if (pinHash !== card.status_pin) {
+    return NextResponse.json({ error: 'PIN이 올바르지 않습니다' }, { status: 401 })
   }
 
   await supabase
