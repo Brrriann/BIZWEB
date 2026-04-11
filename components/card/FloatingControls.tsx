@@ -67,12 +67,24 @@ export function FloatingControls({ supported, currentLang, onLangChange }: Props
 
   const showLangs = supported.length > 1
 
+  // Single-language: act as a plain theme toggle button
+  if (!showLangs) {
+    return (
+      <button
+        onClick={toggleTheme}
+        className="fixed top-4 right-4 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+        style={btnStyle}
+        aria-label="테마 전환"
+      >
+        {theme === 'dark' ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
+      </button>
+    )
+  }
+
   return (
     <div ref={containerRef} className="fixed top-4 right-4 z-50 flex flex-col items-center gap-2">
-      {/* Expanded options — shown above the trigger going upward, or below */}
       {open && (
         <div className="flex flex-col items-center gap-2">
-          {/* Theme toggle */}
           <button
             onClick={toggleTheme}
             className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
@@ -82,8 +94,7 @@ export function FloatingControls({ supported, currentLang, onLangChange }: Props
             {theme === 'dark' ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
           </button>
 
-          {/* Language buttons */}
-          {showLangs && supported.map(lang => (
+          {supported.map(lang => (
             <button
               key={lang}
               onClick={() => handleLang(lang)}
@@ -101,10 +112,9 @@ export function FloatingControls({ supported, currentLang, onLangChange }: Props
         </div>
       )}
 
-      {/* Trigger button */}
       <button
         onClick={() => setOpen(v => !v)}
-        className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+        className="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 active:scale-95"
         style={{
           ...btnStyle,
           backgroundColor: open ? 'var(--accent)' : 'var(--bg-elevated)',
