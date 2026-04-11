@@ -41,11 +41,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: pageUrl,
       siteName: 'MY NAME IS.',
       type: 'profile',
+      images: [{ url: 'https://mynameis.work/og.png', width: 1200, height: 630, alt: card.name }],
     },
     twitter: {
       card: 'summary_large_image',
       title: card.name,
       description: card.bio ?? `${card.name}의 디지털 명함`,
+      images: ['https://mynameis.work/og.png'],
     },
   }
 }

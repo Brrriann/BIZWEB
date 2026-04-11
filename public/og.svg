@@ -1,0 +1,42 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="orb1" cx="20%" cy="20%" r="50%">
+      <stop offset="0%" stop-color="#1ed760" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#1ed760" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="80%" cy="80%" r="40%">
+      <stop offset="0%" stop-color="#1ed760" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#1ed760" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#050505"/>
+
+  <!-- Ambient orbs -->
+  <ellipse cx="240" cy="200" rx="480" ry="480" fill="url(#orb1)"/>
+  <ellipse cx="960" cy="480" rx="320" ry="320" fill="url(#orb2)"/>
+
+  <!-- Main title -->
+  <text x="600" y="256" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="-3">MY NAME IS</text>
+  <text x="873" y="256" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="800" fill="#1ed760" text-anchor="middle">.</text>
+
+  <!-- Tagline -->
+  <text x="600" y="320" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="400" fill="#666666" text-anchor="middle">링크 하나로 전달하는 나만의 디지털 명함</text>
+
+  <!-- Feature pills -->
+  <rect x="180" y="370" width="170" height="48" rx="24" fill="#1ed76018" stroke="#1ed76040" stroke-width="1"/>
+  <text x="265" y="400" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="#1ed760" text-anchor="middle">다국어 지원</text>
+
+  <rect x="366" y="370" width="170" height="48" rx="24" fill="#1ed76018" stroke="#1ed76040" stroke-width="1"/>
+  <text x="451" y="400" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="#1ed760" text-anchor="middle">실시간 상태</text>
+
+  <rect x="552" y="370" width="210" height="48" rx="24" fill="#1ed76018" stroke="#1ed76040" stroke-width="1"/>
+  <text x="657" y="400" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="#1ed760" text-anchor="middle">QR · NFC 명함</text>
+
+  <rect x="778" y="370" width="170" height="48" rx="24" fill="#1ed76018" stroke="#1ed76040" stroke-width="1"/>
+  <text x="863" y="400" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="#1ed760" text-anchor="middle">맞춤 인트로</text>
+
+  <!-- Bottom URL -->
+  <text x="1148" y="594" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600" fill="#333333" text-anchor="end">mynameis.work</text>
+</svg>
