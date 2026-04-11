@@ -1,0 +1,63 @@
+'use client'
+// components/card/LanguageSwitcher.tsx
+import { useState, useEffect } from 'react'
+
+interface Props {
+  supported: string[]
+  current: string
+  onChange: (lang: string) => void
+}
+
+const LANG_LABELS: Record<string, string> = {
+  ko: '한국어',
+  en: 'EN',
+  ja: '日本語',
+}
+
+export function LanguageSwitcher({ supported, current, onChange }: Props) {
+  const [active, setActive] = useState(current)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('preferred_lang')
+    if (saved && supported.includes(saved)) {
+      setActive(saved)
+      onChange(saved)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    setActive(current)
+  }, [current])
+
+  if (supported.length <= 1) return null
+
+  function handleChange(lang: string) {
+    setActive(lang)
+    localStorage.setItem('preferred_lang', lang)
+    onChange(lang)
+  }
+
+  return (
+    <div
+      className="absolute top-14 right-3 flex gap-1 z-10"
+      aria-label="언어 선택"
+    >
+      {supported.map(lang => (
+        <button
+          key={lang}
+          type="button"
+          onClick={() => handleChange(lang)}
+          className="rounded-full px-2.5 py-1 text-xs font-semibold transition-all hover:scale-105"
+          style={{
+            backgroundColor: active === lang ? 'var(--accent)' : 'var(--bg-elevated)',
+            color: active === lang ? '#000' : 'var(--text-muted)',
+            border: '1px solid var(--border)',
+          }}
+        >
+          {LANG_LABELS[lang] ?? lang.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  )
+}

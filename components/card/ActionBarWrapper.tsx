@@ -9,7 +9,7 @@ export function ActionBarWrapper({ card, pageUrl }: { card: Card; pageUrl: strin
   const [showQR, setShowQR] = useState(false)
   return (
     <>
-      <ActionBar card={card} onQR={() => setShowQR(true)} />
+      <ActionBar card={card} onQR={() => setShowQR(true)} pageUrl={pageUrl} />
       {showQR && <QRModal url={pageUrl} onClose={() => setShowQR(false)} />}
     </>
   )

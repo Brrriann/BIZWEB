@@ -7,7 +7,17 @@ import { ThemePicker } from './ThemePicker'
 import { SocialLinksEditor } from './SocialLinksEditor'
 import { GalleryEditor } from './GalleryEditor'
 import { QRDownload } from './QRDownload'
-import type { Card, SocialLink, GalleryImage } from '@/lib/types'
+import { LanguageEditor } from './LanguageEditor'
+import type { Card, SocialLink, GalleryImage, CardTranslation } from '@/lib/types'
+
+// SHA-256 hash using Web Crypto API — bcrypt is unavailable in the browser
+async function sha256(text: string): Promise<string> {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(text)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+}
 
 interface Props {
   card: Card
@@ -17,7 +27,7 @@ interface Props {
 }
 
 export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Props) {
-  const [form, setForm] = useState({ ...card })
+  const [form, setForm] = useState({ ...card, status_pin_input: '' })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [uploadingProfile, setUploadingProfile] = useState(false)
@@ -27,6 +37,11 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
 
   function update(field: string, value: string | boolean) {
     setForm(prev => ({ ...prev, [field]: value }))
+    setSaved(false)
+  }
+
+  function updateLangs(supported: string[], translations: Record<string, CardTranslation>) {
+    setForm(prev => ({ ...prev, supported_languages: supported, translations }))
     setSaved(false)
   }
 
@@ -88,13 +103,26 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
   async function save(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
+
+    // Build the payload — exclude the ephemeral status_pin_input field
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { status_pin_input, ...rest } = form
+    const payload: typeof rest & { status_pin?: string } = { ...rest }
+
+    // If admin typed a new PIN, hash it with SHA-256 before saving
+    if (status_pin_input.trim()) {
+      payload.status_pin = await sha256(status_pin_input.trim())
+    }
+
     await fetch(`/api/admin/cards/${card.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     })
     setSaved(true)
     setSaving(false)
+    // Clear the PIN input after successful save
+    setForm(prev => ({ ...prev, status_pin_input: '' }))
     onRefresh()
   }
 
@@ -178,6 +206,110 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
         <input type="checkbox" id="active" checked={form.is_active} onChange={e => update('is_active', e.target.checked)}
           className="w-4 h-4 rounded" style={{ accentColor: 'var(--accent)' }} />
         <label htmlFor="active" className="text-sm" style={{ color: 'var(--text-secondary)' }}>페이지 활성화</label>
+      </div>
+
+      {/* 실물 QR 명함 신청 버튼 토글 */}
+      <div className="flex items-center justify-between py-2 border-t" style={{ borderColor: 'var(--border)' }}>
+        <div>
+          <div className="text-sm font-medium">실물 QR 명함 신청 버튼</div>
+          <div className="text-xs" style={{ color: 'var(--text-muted)' }}>클라이언트 카드에 QR명함 제작 신청 버튼 표시</div>
+        </div>
+        <button
+          type="button"
+          onClick={() => update('show_qr_card_cta', !form.show_qr_card_cta)}
+          className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+          style={{ backgroundColor: form.show_qr_card_cta ? 'var(--accent)' : 'var(--bg-elevated)', border: '1px solid var(--border)' }}
+        >
+          <span
+            className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+            style={{ transform: form.show_qr_card_cta ? 'translateX(1.25rem)' : 'translateX(0.25rem)' }}
+          />
+        </button>
+      </div>
+
+      {/* 상태 설정 */}
+      <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+        <label className="block text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>상태 설정</label>
+
+        {/* 상태 선택 */}
+        <div className="mb-3">
+          <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-muted)' }}>현재 상태</label>
+          <select
+            value={form.status}
+            onChange={e => update('status', e.target.value)}
+            className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+            style={inputStyle}
+          >
+            <option value="online">🟢 온라인</option>
+            <option value="busy">🔴 바쁨</option>
+            <option value="meeting">🟡 미팅 중</option>
+            <option value="offline">⚫ 오프라인</option>
+          </select>
+        </div>
+
+        {/* PIN 설정 */}
+        <div>
+          <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-muted)' }}>
+            상태 변경 PIN
+            {form.status_pin && <span className="ml-2 text-[10px]" style={{ color: '#22c55e' }}>● 설정됨</span>}
+          </label>
+          <input
+            type="password"
+            inputMode="numeric"
+            value={form.status_pin_input}
+            onChange={e => update('status_pin_input', e.target.value)}
+            placeholder="PIN 설정 (4자리 숫자 권장)"
+            className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+            style={inputStyle}
+          />
+          <p className="mt-1 text-[10px]" style={{ color: 'var(--text-muted)' }}>
+            입력 시 저장할 때 SHA-256으로 암호화됩니다. 비워두면 기존 PIN이 유지됩니다.
+          </p>
+        </div>
+      </div>
+
+      {/* 인트로 애니메이션 */}
+      <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+        <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>인트로 애니메이션</label>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>방문자가 카드를 처음 열 때 한 번만 재생됩니다.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+          {[
+            { key: null, label: '없음', icon: '✕' },
+            { key: 'fade', label: '페이드', icon: '✦' },
+            { key: 'slide', label: '슬라이드', icon: '▲' },
+            { key: 'typewriter', label: '타이핑', icon: 'Aa' },
+            { key: 'particles', label: '파티클', icon: '✦✦' },
+            { key: 'wave', label: '웨이브', icon: '〜' },
+          ].map(({ key, label, icon }) => (
+            <button
+              key={String(key)}
+              type="button"
+              onClick={() => update('intro_animation', key ?? '')}
+              style={{
+                padding: '12px 8px',
+                borderRadius: 12,
+                border: `2px solid ${(form.intro_animation ?? '') === (key ?? '') ? 'var(--accent)' : 'var(--border)'}`,
+                background: (form.intro_animation ?? '') === (key ?? '') ? 'rgba(30,215,96,0.1)' : 'var(--bg-elevated)',
+                color: 'var(--text-primary)',
+                cursor: 'pointer',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: 20, marginBottom: 4 }}>{icon}</div>
+              <div style={{ fontSize: 11, fontWeight: 600 }}>{label}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 다국어 설정 */}
+      <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+        <label className="block text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>다국어 설정</label>
+        <LanguageEditor
+          supported={form.supported_languages ?? ['ko']}
+          translations={form.translations ?? {}}
+          onChange={updateLangs}
+        />
       </div>
 
       {/* 저장 */}

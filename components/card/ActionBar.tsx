@@ -1,12 +1,16 @@
 // components/card/ActionBar.tsx
 'use client'
-import { Phone, MessageSquare, Download, QrCode } from 'lucide-react'
+import { useState } from 'react'
+import { Phone, MessageSquare, Download, QrCode, Link, Share2 } from 'lucide-react'
 import { generateVCF } from '@/lib/vcf'
 import type { Card } from '@/lib/types'
 
-interface Props { card: Card; onQR: () => void }
+interface Props { card: Card; onQR: () => void; pageUrl: string }
 
-export function ActionBar({ card, onQR }: Props) {
+export function ActionBar({ card, onQR, pageUrl }: Props) {
+  const [copied, setCopied] = useState(false)
+  const [shared, setShared] = useState(false)
+
   function downloadVCF() {
     const vcf = generateVCF({
       name: card.name, phone: card.phone, email: card.email,
@@ -22,11 +26,29 @@ export function ActionBar({ card, onQR }: Props) {
     URL.revokeObjectURL(url)
   }
 
+  async function copyLink() {
+    await navigator.clipboard.writeText(pageUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function shareCard() {
+    if (navigator.share) {
+      await navigator.share({ title: card.name, url: pageUrl })
+    } else {
+      await navigator.clipboard.writeText(pageUrl)
+    }
+    setShared(true)
+    setTimeout(() => setShared(false), 2000)
+  }
+
   const actions = [
     card.phone && { icon: Phone, label: '전화', href: `tel:${card.phone}` },
     card.phone && { icon: MessageSquare, label: '문자', href: `sms:${card.phone}` },
     { icon: Download, label: '연락처저장', onClick: downloadVCF },
     { icon: QrCode, label: 'QR', onClick: onQR },
+    { icon: Link, label: copied ? '복사됨!' : '링크복사', onClick: copyLink },
+    { icon: Share2, label: shared ? '공유됨!' : '공유', onClick: shareCard },
   ].filter(Boolean) as { icon: typeof Phone; label: string; href?: string; onClick?: () => void }[]
 
   return (

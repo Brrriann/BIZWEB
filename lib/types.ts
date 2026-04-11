@@ -1,4 +1,12 @@
 // lib/types.ts
+
+export interface CardTranslation {
+  name?: string
+  title?: string
+  bio?: string
+  address?: string
+}
+
 export interface Card {
   id: string
   slug: string
@@ -14,6 +22,13 @@ export interface Card {
   theme_color: string
   social_links_title?: string
   is_active: boolean
+  // v2 fields
+  supported_languages: string[]
+  translations: Record<string, CardTranslation>
+  status: 'online' | 'busy' | 'meeting' | 'offline'
+  status_pin?: string
+  intro_animation?: string
+  show_qr_card_cta: boolean
 }
 
 export interface SocialLink {
