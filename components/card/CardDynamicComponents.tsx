@@ -13,10 +13,10 @@ class SafeBoundary extends Component<{ children: ReactNode }, { hasError: boolea
   render() { return this.state.hasError ? null : this.props.children }
 }
 
-function withSafeBoundary<P extends Record<string, unknown>>(
-  Comp: React.ComponentType<P>
-) {
-  return function Wrapped(props: P) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function withSafeBoundary(Comp: React.ComponentType<any>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function Wrapped(props: any) {
     return <SafeBoundary><Comp {...props} /></SafeBoundary>
   }
 }
