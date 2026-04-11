@@ -8,8 +8,9 @@ type FilterEntry = [string, string] // [col, "op.value"]
 
 // ─── Result helpers ────────────────────────────────────────────────────────────
 
-function ok(data: Row | Row[] | null, count?: number) {
-  return { data, error: null, count: count ?? null }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ok(data: any, count?: number) {
+  return { data, error: null as null, count: count ?? null }
 }
 function err(e: unknown) {
   const message = e instanceof Error ? e.message : String(e)
