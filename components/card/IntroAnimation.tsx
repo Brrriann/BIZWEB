@@ -19,10 +19,10 @@ interface Particle {
 function generateParticles(count: number): Particle[] {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
-    angle: (i / count) * 360 + Math.random() * 18,
-    distance: 80 + Math.random() * 120,
-    size: 4 + Math.random() * 8,
-    delay: Math.random() * 0.3,
+    angle: (i / count) * 360 + (i * 7) % 18,
+    distance: 80 + (i * 13) % 120,
+    size: 4 + (i * 3) % 8,
+    delay: (i * 0.015),
   }))
 }
 

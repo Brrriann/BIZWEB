@@ -25,7 +25,7 @@ export interface Card {
   // v2 fields
   supported_languages: string[]
   translations: Record<string, CardTranslation>
-  status: 'online' | 'busy' | 'meeting' | 'offline'
+  status: 'online' | 'vacation'
   status_pin?: string
   intro_animation?: string
   show_qr_card_cta: boolean
