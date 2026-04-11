@@ -57,10 +57,18 @@ export function ContactInfo({ card, lang = 'ko' }: Props) {
   const extra = (card.extra_contacts ?? []).map((c: ExtraContact) => {
     const Icon = TYPE_ICON[c.type] ?? Phone
     const rawLabel = c.label || t[c.type] || c.type
+    // Sanitize href — only allow safe schemes per type
     let href = '#'
-    if (c.type === 'email') href = `mailto:${c.value}`
-    else if (c.type === 'address') href = `https://map.naver.com/search?query=${encodeURIComponent(c.value)}`
-    else href = `tel:${c.value}`
+    if (c.type === 'email') {
+      const safe = c.value.replace(/[^a-zA-Z0-9@._%+\-]/g, '')
+      href = `mailto:${safe}`
+    } else if (c.type === 'address') {
+      href = `https://map.naver.com/search?query=${encodeURIComponent(c.value)}`
+    } else {
+      // phone/mobile/office/fax — digits and hyphens only
+      const safe = c.value.replace(/[^0-9\-+]/g, '')
+      href = `tel:${safe}`
+    }
     return { icon: Icon, label: rawLabel, value: c.value, href, external: c.type === 'address' }
   })
 

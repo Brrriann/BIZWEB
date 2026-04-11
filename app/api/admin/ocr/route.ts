@@ -12,6 +12,10 @@ export async function POST(req: NextRequest) {
 
   const { imageBase64, mimeType } = await req.json()
   if (!imageBase64) return NextResponse.json({ error: 'No image provided' }, { status: 400 })
+  // ~10MB image limit (base64 is ~4/3x raw size)
+  if (typeof imageBase64 !== 'string' || imageBase64.length > 13_000_000) {
+    return NextResponse.json({ error: '이미지 크기가 너무 큽니다 (최대 10MB)' }, { status: 413 })
+  }
 
   const prompt = `이 명함 이미지에서 다음 정보를 추출해 JSON으로만 응답해 (설명 없이 JSON만):
 {
