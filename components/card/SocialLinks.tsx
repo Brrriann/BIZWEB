@@ -1,4 +1,6 @@
 // components/card/SocialLinks.tsx
+'use client'
+import { useState } from 'react'
 import { MessageCircle, Camera, Play, BookOpen, Globe, AtSign, Music, Link, ChevronRight } from 'lucide-react'
 import type { SocialLink } from '@/lib/types'
 import type { LucideIcon } from 'lucide-react'
@@ -20,6 +22,60 @@ interface Props {
   sectionTitle?: string
 }
 
+function createRipple(e: React.MouseEvent<HTMLAnchorElement>) {
+  const button = e.currentTarget
+  const ripple = document.createElement('span')
+  const rect = button.getBoundingClientRect()
+  const size = Math.max(rect.width, rect.height)
+  ripple.style.cssText = `
+    position: absolute; width: ${size}px; height: ${size}px;
+    left: ${e.clientX - rect.left - size / 2}px;
+    top: ${e.clientY - rect.top - size / 2}px;
+    border-radius: 50%; pointer-events: none;
+    background: rgba(255,255,255,0.2);
+    animation: ripple 0.6s ease-out forwards;
+  `
+  button.style.position = 'relative'
+  button.style.overflow = 'hidden'
+  button.appendChild(ripple)
+  setTimeout(() => ripple.remove(), 600)
+}
+
+function LinkItem({ link }: { link: SocialLink }) {
+  const [hovered, setHovered] = useState(false)
+  const meta = PLATFORM_META[link.platform] ?? PLATFORM_META.link
+  const Icon = meta.icon
+  const href = link.url && !link.url.match(/^https?:\/\//) ? `https://${link.url}` : link.url
+
+  return (
+    <a
+      key={link.id}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 p-3.5 rounded-xl"
+      style={{
+        backgroundColor: 'var(--bg-surface)',
+        border: '1px solid var(--border)',
+        transition: 'all 0.3s ease',
+        boxShadow: hovered
+          ? '0 0 20px rgba(30, 215, 96, 0.15), 0 4px 12px rgba(0,0,0,0.15)'
+          : '0 0 0 0 transparent',
+        transform: hovered ? 'translateY(-1px) scale(1.02)' : 'translateY(0) scale(1)',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={createRipple}
+    >
+      <div className="w-8 flex justify-center" style={{ color: 'var(--text-muted)' }}>
+        <Icon size={20} strokeWidth={1.5} />
+      </div>
+      <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{link.label || meta.label}</span>
+      <ChevronRight size={16} strokeWidth={1.5} className="ml-auto" style={{ color: 'var(--accent)' }} />
+    </a>
+  )
+}
+
 export function SocialLinks({ links, sectionTitle }: Props) {
   if (!links.length) return null
   return (
@@ -31,30 +87,9 @@ export function SocialLinks({ links, sectionTitle }: Props) {
         {sectionTitle || 'Our Service'}
       </h2>
       <div className="flex flex-col gap-2">
-        {links.map(link => {
-          const meta = PLATFORM_META[link.platform] ?? PLATFORM_META.link
-          const Icon = meta.icon
-          const href = link.url && !link.url.match(/^https?:\/\//) ? `https://${link.url}` : link.url
-          return (
-            <a
-              key={link.id}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 p-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02]"
-              style={{
-                backgroundColor: 'var(--bg-surface)',
-                border: '1px solid var(--border)',
-              }}
-            >
-              <div className="w-8 flex justify-center" style={{ color: 'var(--text-muted)' }}>
-                <Icon size={20} strokeWidth={1.5} />
-              </div>
-              <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{link.label || meta.label}</span>
-              <ChevronRight size={16} strokeWidth={1.5} className="ml-auto" style={{ color: 'var(--accent)' }} />
-            </a>
-          )
-        })}
+        {links.map(link => (
+          <LinkItem key={link.id} link={link} />
+        ))}
       </div>
     </div>
   )

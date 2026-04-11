@@ -66,3 +66,22 @@ body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Ripple animation */
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* Smooth card hover lift */
+.card-lift {
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Glow effect */
+.glow-accent {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+}

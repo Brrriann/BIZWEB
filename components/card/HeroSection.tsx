@@ -1,4 +1,6 @@
 // components/card/HeroSection.tsx
+'use client'
+import { useRef } from 'react'
 import { User } from 'lucide-react'
 import Image from 'next/image'
 
@@ -11,6 +13,23 @@ interface Props {
 }
 
 export function HeroSection({ name, title, company, profileImageUrl, themeColor }: Props) {
+  const imgRef = useRef<HTMLDivElement>(null)
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const el = imgRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5   // -0.5 to 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    el.style.transform = `perspective(400px) rotateX(${-y * 15}deg) rotateY(${x * 15}deg) scale(1.05)`
+  }
+
+  function handleMouseLeave() {
+    const el = imgRef.current
+    if (!el) return
+    el.style.transform = 'perspective(400px) rotateX(0deg) rotateY(0deg) scale(1)'
+  }
+
   return (
     <div className="relative">
       <div
@@ -22,11 +41,15 @@ export function HeroSection({ name, title, company, profileImageUrl, themeColor 
       <div className="px-5 pb-5">
         <div className="flex items-end gap-4 -mt-10">
           <div
+            ref={imgRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0"
             style={{
               border: '4px solid var(--bg-surface)',
               boxShadow: 'var(--shadow-elevated)',
               backgroundColor: 'var(--bg-elevated)',
+              transition: 'transform 0.3s ease',
             }}
           >
             {profileImageUrl ? (
