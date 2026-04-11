@@ -4,9 +4,8 @@ export const dynamicParams = true
 
 import { notFound } from 'next/navigation'
 import { getSupabaseServer } from '@/lib/supabase'
-import { SocialLinks } from '@/components/card/SocialLinks'
 import { ViewCounter } from '@/components/card/ViewCounter'
-import { Gallery, CardWithLang, IntroAnimation } from '@/components/card/CardDynamicComponents'
+import { CardWithLang, IntroAnimation } from '@/components/card/CardDynamicComponents'
 import { IntroErrorBoundary } from '@/components/card/IntroErrorBoundary'
 import Link from 'next/link'
 import type { Metadata } from 'next'
@@ -61,9 +60,12 @@ export default async function CardPage({ params }: Props) {
           />
         </IntroErrorBoundary>
       )}
-      <CardWithLang card={card} pageUrl={pageUrl} />
-      <Gallery images={galleryImages} />
-      <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
+      <CardWithLang
+        card={card}
+        pageUrl={pageUrl}
+        socialLinks={socialLinks}
+        galleryImages={galleryImages}
+      />
       <ViewCounter />
       <footer className="text-center pb-10 pt-2 flex flex-col items-center gap-3">
         <Link
