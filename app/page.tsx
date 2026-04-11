@@ -330,17 +330,13 @@ export default function LandingPage() {
 
           <Reveal className="bento-c3" delay={90}>
             <BentoCard>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
                 <span style={{ fontSize: 18, flexShrink: 0 }}>🟢</span>
                 <div style={{ fontSize: 11, fontWeight: 700, color: '#22c55e' }}>온라인</div>
-                <span style={{ fontSize: 18, flexShrink: 0 }}>🟡</span>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#eab308' }}>미팅중</div>
-                <span style={{ fontSize: 18, flexShrink: 0 }}>🔴</span>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#ef4444' }}>바쁨</div>
-                <span style={{ fontSize: 18, flexShrink: 0 }}>⚫</span>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#666' }}>오프라인</div>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>🏖️</span>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b' }}>휴가중</div>
               </div>
-              <div style={{ fontSize: 12, color: '#555', marginTop: 8 }}>실시간 상태</div>
+              <div style={{ fontSize: 12, color: '#555', marginTop: 8 }}>실시간 상태 · PIN 보호</div>
             </BentoCard>
           </Reveal>
 
