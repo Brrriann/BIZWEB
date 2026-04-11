@@ -54,6 +54,10 @@ function PhoneMockup() {
           <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#1ed760', border: '3px solid #121212', marginTop: -22, marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>👤</div>
           <div style={{ height: 9, width: 70, background: '#fff', borderRadius: 4, marginBottom: 4 }} />
           <div style={{ height: 6, width: 48, background: '#444', borderRadius: 4 }} />
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: '#1a2a1a', border: '1px solid #2a4a2a', borderRadius: 999, padding: '2px 8px', marginBottom: 6 }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e' }} />
+            <span style={{ fontSize: 7, color: '#22c55e', fontWeight: 600 }}>온라인</span>
+          </div>
           <div style={{ display: 'flex', gap: 5, marginTop: 10 }}>
             {['전화', '문자', '저장', 'QR'].map(l => (
               <div key={l} style={{ flex: 1, background: '#1f1f1f', borderRadius: 20, padding: '6px 2px', textAlign: 'center', border: '1px solid #2a2a2a' }}>
@@ -253,7 +257,7 @@ export default function LandingPage() {
             </Reveal>
             <Reveal delay={160}>
               <p style={{ fontSize: 15, color: '#888', lineHeight: 1.75, marginBottom: 28 }}>
-                링크 하나로 전화, 문자, 연락처 저장, SNS까지. 종이 명함이 필요 없는 시대의 디지털 명함.
+                다국어 지원, 실시간 상태 표시, 맞춤 인트로까지. 단순한 명함을 넘어선 나만의 디지털 프로필.
               </p>
             </Reveal>
             <Reveal delay={220}>
@@ -264,7 +268,7 @@ export default function LandingPage() {
             </Reveal>
             <Reveal delay={300}>
               <div style={{ display: 'flex', gap: 28, marginTop: 36, flexWrap: 'wrap' }}>
-                {[['100+', '제작 완료'], ['99%', '고객 만족도'], ['1일', '평균 제작일']].map(([n, l]) => (
+                {[['100+', '제작 완료'], ['7가지', '핵심 기능'], ['3개국어', '다국어 지원']].map(([n, l]) => (
                   <div key={l}>
                     <div style={{ fontSize: 26, fontWeight: 800, color: '#1ed760', letterSpacing: '-0.03em' }}>{n}</div>
                     <div style={{ fontSize: 12, color: '#555', marginTop: 2 }}>{l}</div>
@@ -301,7 +305,7 @@ export default function LandingPage() {
                 링크 하나로<br /><span className="green">모든 것을</span> 공유
               </h3>
               <p style={{ fontSize: 13, color: '#666', lineHeight: 1.65, marginBottom: 18 }}>
-                QR 코드, URL 한 줄이면 끝. 카카오톡, 문자, 어디서든 바로 명함 전달.
+                QR 코드, URL 한 줄이면 끝. 링크 복사 버튼과 SNS 공유로 카카오톡, 문자, 어디서든 바로 명함 전달.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 3, width: 72 }}>
                 {Array.from({ length: 36 }).map((_, i) => (
@@ -313,12 +317,12 @@ export default function LandingPage() {
 
           <Reveal className="bento-c2" delay={60}>
             <BentoCard>
-              <div style={{ fontSize: 28, marginBottom: 10 }}>🎨</div>
-              <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.02em' }}>테마 커스텀</h3>
-              <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6 }}>브랜드 컬러에 맞춘 나만의 명함.</p>
+              <div style={{ fontSize: 28, marginBottom: 10 }}>🌐</div>
+              <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.02em' }}>다국어 지원</h3>
+              <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6 }}>한국어 · English · 日本語 — 클릭 한 번으로 언어 전환.</p>
               <div style={{ display: 'flex', gap: 6, marginTop: 14 }}>
-                {['#1ed760','#2563eb','#dc2626','#9333ea','#ea580c'].map(c => (
-                  <div key={c} style={{ width: 20, height: 20, borderRadius: '50%', background: c, flexShrink: 0 }} />
+                {['KO', 'EN', 'JP'].map(lang => (
+                  <div key={lang} style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(30,215,96,0.1)', border: '1px solid rgba(30,215,96,0.25)', fontSize: 11, fontWeight: 700, color: '#1ed760' }}>{lang}</div>
                 ))}
               </div>
             </BentoCard>
@@ -326,13 +330,17 @@ export default function LandingPage() {
 
           <Reveal className="bento-c3" delay={90}>
             <BentoCard>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 24, flexShrink: 0 }}>📊</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700 }}>방문자 카운터</div>
-                  <div style={{ fontSize: 12, color: '#555', marginTop: 3 }}>실시간 조회수 확인</div>
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>🟢</span>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#22c55e' }}>온라인</div>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>🟡</span>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#eab308' }}>미팅중</div>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>🔴</span>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#ef4444' }}>바쁨</div>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>⚫</span>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#666' }}>오프라인</div>
               </div>
+              <div style={{ fontSize: 12, color: '#555', marginTop: 8 }}>실시간 상태</div>
             </BentoCard>
           </Reveal>
 
@@ -341,14 +349,15 @@ export default function LandingPage() {
               <div style={{ fontSize: 26, marginBottom: 8 }}>📷</div>
               <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.01em' }}>갤러리</h3>
               <p style={{ fontSize: 12, color: '#555', lineHeight: 1.55 }}>포트폴리오, 제품 사진도 명함에.</p>
+              <div style={{ fontSize: 10, color: '#1ed760', fontWeight: 600, marginTop: 8 }}>← 스와이프 지원 →</div>
             </BentoCard>
           </Reveal>
 
           <Reveal className="bento-c5" delay={150}>
             <BentoCard glowColor="rgba(30,215,96,0.04)">
-              <div style={{ fontSize: 26, marginBottom: 8 }}>💾</div>
-              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.01em' }}>연락처 저장</h3>
-              <p style={{ fontSize: 12, color: '#555', lineHeight: 1.55 }}>버튼 하나로 주소록 저장.</p>
+              <div style={{ fontSize: 26, marginBottom: 8 }}>🎬</div>
+              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.01em' }}>인트로 애니메이션</h3>
+              <p style={{ fontSize: 12, color: '#555', lineHeight: 1.55 }}>5가지 맞춤 인트로 효과.</p>
             </BentoCard>
           </Reveal>
 
@@ -371,7 +380,7 @@ export default function LandingPage() {
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
             <div className="pill-tag" style={{ marginBottom: 16 }}>Process</div>
             <h2 style={{ fontSize: 'clamp(24px, 4vw, 44px)', fontWeight: 800, letterSpacing: '-0.03em', marginTop: 8 }}>
-              단 3단계, 하루면 완성
+              단 4단계, 하루면 완성
             </h2>
           </div>
         </Reveal>
@@ -380,6 +389,7 @@ export default function LandingPage() {
             { n: '01', title: '정보 전달', desc: '이름, 연락처, SNS, 사진 등 원하는 정보를 전달해 주세요.' },
             { n: '02', title: '디자인 제작', desc: '브랜드에 맞는 테마 컬러와 레이아웃으로 명함을 제작합니다.' },
             { n: '03', title: '링크 전달', desc: 'URL과 QR 코드를 바로 받아 즉시 공유하세요.' },
+            { n: '04', title: '링크 공유', desc: 'URL, QR코드, SNS 공유 버튼으로 어디서든 즉시 명함 전달.' },
           ].map((s, i) => (
             <Reveal key={s.n} delay={i * 80}>
               <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, padding: '20px 22px', display: 'flex', gap: 18, alignItems: 'flex-start' }}>
@@ -407,7 +417,7 @@ export default function LandingPage() {
               지금 바로 시작하세요
             </h2>
             <p style={{ color: '#777', fontSize: 15, marginBottom: 28, lineHeight: 1.65 }}>
-              종이 명함 인쇄 비용보다 저렴하게, 훨씬 강력한 디지털 명함을 만들어 드립니다.
+              다국어 지원부터 맞춤 인트로까지, 종이 명함이 줄 수 없는 경험을 제공합니다.
             </p>
             <Link href="/contact" className="cta-btn" style={{ fontSize: 14, padding: '15px 28px' }}>
               무료 상담 신청하기
