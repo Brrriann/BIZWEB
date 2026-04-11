@@ -9,6 +9,7 @@ const LABELS: Record<string, Record<string, string>> = {
   ko: { call: '전화', sms: '문자', save: '연락처저장', qr: 'QR', copy: '링크복사', copied: '복사됨!', share: '공유', shared: '공유됨!' },
   en: { call: 'Call', sms: 'Text', save: 'Save', qr: 'QR', copy: 'Copy Link', copied: 'Copied!', share: 'Share', shared: 'Shared!' },
   ja: { call: '電話', sms: 'SMS', save: '連絡先保存', qr: 'QR', copy: 'リンクコピー', copied: 'コピー済!', share: 'シェア', shared: 'シェア済!' },
+  zh: { call: '电话', sms: '短信', save: '保存联系人', qr: 'QR', copy: '复制链接', copied: '已复制!', share: '分享', shared: '已分享!' },
 }
 
 interface Props { card: Card; onQR: () => void; pageUrl: string; lang?: string }

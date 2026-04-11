@@ -11,6 +11,7 @@ interface Props {
 const ALL_LANGS: { code: string; label: string }[] = [
   { code: 'en', label: 'English' },
   { code: 'ja', label: '日本語' },
+  { code: 'zh', label: '中文' },
 ]
 
 const FIELD_LABELS: { key: keyof CardTranslation; label: string }[] = [

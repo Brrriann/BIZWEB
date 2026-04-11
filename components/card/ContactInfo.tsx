@@ -1,3 +1,4 @@
+'use client'
 // components/card/ContactInfo.tsx
 import { Phone, Mail, MapPin } from 'lucide-react'
 import type { Card } from '@/lib/types'
@@ -6,6 +7,7 @@ const LABELS: Record<string, { phone: string; email: string; address: string }> 
   ko: { phone: '전화',  email: '이메일', address: '주소' },
   en: { phone: 'Phone', email: 'Email',  address: 'Address' },
   ja: { phone: '電話',  email: 'メール', address: '住所' },
+  zh: { phone: '电话',  email: '邮箱',   address: '地址' },
 }
 
 interface Props { card: Card; lang?: string }

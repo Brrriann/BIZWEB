@@ -12,6 +12,7 @@ const LANG_LABELS: Record<string, string> = {
   ko: '🇰🇷',
   en: '🇺🇸',
   ja: '🇯🇵',
+  zh: '🇨🇳',
 }
 
 export function LanguageSwitcher({ supported, current, onChange }: Props) {
