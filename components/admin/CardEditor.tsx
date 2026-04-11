@@ -24,12 +24,15 @@ interface Props {
   socialLinks: SocialLink[]
   galleryImages: GalleryImage[]
   onRefresh: () => void
+  onDelete?: () => void
 }
 
-export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Props) {
+export function CardEditor({ card, socialLinks, galleryImages, onRefresh, onDelete }: Props) {
   const [form, setForm] = useState({ ...card, status_pin_input: '' })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [uploadingProfile, setUploadingProfile] = useState(false)
   const [scanning, setScanning] = useState(false)
   const [scanError, setScanError] = useState('')
@@ -124,6 +127,13 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
     // Clear the PIN input after successful save
     setForm(prev => ({ ...prev, status_pin_input: '' }))
     onRefresh()
+  }
+
+  async function deleteCard() {
+    setDeleting(true)
+    await fetch(`/api/admin/cards/${card.id}`, { method: 'DELETE' })
+    setDeleting(false)
+    onDelete?.()
   }
 
   const inputStyle = {
@@ -343,6 +353,45 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
       <div>
         <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>QR 코드</label>
         <QRDownload slug={card.slug} />
+      </div>
+
+      <hr style={{ borderColor: 'var(--border)' }} />
+
+      {/* 명함 삭제 */}
+      <div className="rounded-2xl p-4" style={{ border: '1px solid #3f1212', backgroundColor: 'rgba(239,68,68,0.04)' }}>
+        <p className="text-sm font-semibold mb-1" style={{ color: '#f3727f' }}>명함 삭제</p>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>삭제하면 복구할 수 없습니다. 모든 링크, 갤러리 이미지, 조회 기록이 함께 삭제됩니다.</p>
+        {!confirmDelete ? (
+          <button
+            type="button"
+            onClick={() => setConfirmDelete(true)}
+            className="rounded-full px-5 py-2 text-sm font-bold transition-all hover:scale-[1.02]"
+            style={{ backgroundColor: 'rgba(239,68,68,0.15)', color: '#f3727f', border: '1px solid #3f1212' }}
+          >
+            명함 삭제
+          </button>
+        ) : (
+          <div className="flex gap-2 items-center">
+            <span className="text-xs font-semibold" style={{ color: '#f3727f' }}>정말 삭제하시겠습니까?</span>
+            <button
+              type="button"
+              onClick={deleteCard}
+              disabled={deleting}
+              className="rounded-full px-5 py-2 text-sm font-bold transition-all hover:scale-[1.02] disabled:opacity-50"
+              style={{ backgroundColor: '#ef4444', color: '#fff' }}
+            >
+              {deleting ? '삭제 중...' : '확인, 삭제'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirmDelete(false)}
+              className="text-sm px-3"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              취소
+            </button>
+          </div>
+        )}
       </div>
     </form>
   )

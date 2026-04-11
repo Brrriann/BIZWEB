@@ -34,7 +34,7 @@ export default function EditCardPage() {
         <a href={`/${data.card.slug}`} target="_blank" rel="noopener noreferrer"
           className="ml-auto text-sm font-semibold" style={{ color: 'var(--accent)' }}>페이지 보기 →</a>
       </div>
-      <CardEditor {...data} onRefresh={load} />
+      <CardEditor {...data} onRefresh={load} onDelete={() => router.push('/admin')} />
     </div>
   )
 }
