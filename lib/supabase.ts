@@ -8,7 +8,7 @@ type FilterEntry = [string, string] // [col, "op.value"]
 
 // ─── Result helpers ────────────────────────────────────────────────────────────
 
-function ok(data: unknown, count?: number) {
+function ok(data: Row | Row[] | null, count?: number) {
   return { data, error: null, count: count ?? null }
 }
 function err(e: unknown) {
