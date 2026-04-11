@@ -241,9 +241,7 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
             style={inputStyle}
           >
             <option value="online">🟢 온라인</option>
-            <option value="busy">🔴 바쁨</option>
-            <option value="meeting">🟡 미팅 중</option>
-            <option value="offline">⚫ 오프라인</option>
+            <option value="vacation">🏖️ 휴가중</option>
           </select>
         </div>
 
