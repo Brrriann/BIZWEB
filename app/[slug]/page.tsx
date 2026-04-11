@@ -63,6 +63,17 @@ export default async function CardPage({ params }: Props) {
       <ContactInfo card={card} />
       <Gallery images={galleryImages} />
       <SocialLinks links={socialLinks} sectionTitle={card.social_links_title} />
+      {card.show_qr_card_cta && (
+        <div className="px-4 pb-3 flex justify-center">
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold transition-all hover:scale-105"
+            style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-muted)' }}
+          >
+            <span style={{ color: 'var(--accent)' }}>🪪</span> 실물 QR 명함 제작 신청
+          </Link>
+        </div>
+      )}
       <ViewCounter cardId={card.id} initialCount={viewCount} />
       <footer className="text-center pb-10 pt-2 flex flex-col items-center gap-3">
         <Link

@@ -180,6 +180,25 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh }: Prop
         <label htmlFor="active" className="text-sm" style={{ color: 'var(--text-secondary)' }}>페이지 활성화</label>
       </div>
 
+      {/* 실물 QR 명함 신청 버튼 토글 */}
+      <div className="flex items-center justify-between py-2 border-t" style={{ borderColor: 'var(--border)' }}>
+        <div>
+          <div className="text-sm font-medium">실물 QR 명함 신청 버튼</div>
+          <div className="text-xs" style={{ color: 'var(--text-muted)' }}>클라이언트 카드에 QR명함 제작 신청 버튼 표시</div>
+        </div>
+        <button
+          type="button"
+          onClick={() => update('show_qr_card_cta', !form.show_qr_card_cta)}
+          className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+          style={{ backgroundColor: form.show_qr_card_cta ? 'var(--accent)' : 'var(--bg-elevated)', border: '1px solid var(--border)' }}
+        >
+          <span
+            className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+            style={{ transform: form.show_qr_card_cta ? 'translateX(1.25rem)' : 'translateX(0.25rem)' }}
+          />
+        </button>
+      </div>
+
       {/* 저장 */}
       <button type="submit" disabled={saving}
         className="w-full rounded-full py-3 font-bold uppercase tracking-wider transition-all hover:scale-[1.02] disabled:opacity-50"
