@@ -82,6 +82,9 @@ export default async function CardPage({ params }: Props) {
         >
           개인정보처리방침
         </Link>
+        <p className="text-xs" style={{ color: 'var(--text-muted)', opacity: 0.5 }}>
+          © {new Date().getFullYear()} Magnate Korea. All rights reserved.
+        </p>
       </footer>
     </main>
   )
