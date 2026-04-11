@@ -1,12 +1,9 @@
 // app/api/cards/[slug]/status/route.ts
-// PUBLIC API — no admin auth required. Uses service role key (getSupabaseServer),
-// so no additional RLS policy is needed for this update.
 export const runtime = 'edge'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseServer } from '@/lib/supabase'
 
-// SHA-256 hash using Web Crypto API (Edge Runtime compatible — bcrypt is NOT available)
 async function sha256(text: string): Promise<string> {
   const encoder = new TextEncoder()
   const data = encoder.encode(text)
@@ -15,12 +12,55 @@ async function sha256(text: string): Promise<string> {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
+// Constant-time comparison to prevent timing attacks on hash comparison
+function timingSafeHexEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return diff === 0
+}
+
+// Rate limit: max 10 PIN attempts per slug per 10 minutes
+const pinAttempts = new Map<string, { count: number; resetAt: number }>()
+const MAX_PIN_ATTEMPTS = 10
+const PIN_WINDOW_MS = 10 * 60 * 1000
+
+function checkPinRateLimit(key: string): boolean {
+  const now = Date.now()
+  const entry = pinAttempts.get(key)
+  if (!entry || now > entry.resetAt) {
+    pinAttempts.set(key, { count: 1, resetAt: now + PIN_WINDOW_MS })
+    return true
+  }
+  if (entry.count >= MAX_PIN_ATTEMPTS) return false
+  entry.count++
+  return true
+}
+
+function clearPinRateLimit(key: string) {
+  pinAttempts.delete(key)
+}
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
-  const { pin, status } = await req.json()
+
+  const ip = req.headers.get('cf-connecting-ip')
+    ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    ?? 'unknown'
+  const rateLimitKey = `${slug}:${ip}`
+
+  if (!checkPinRateLimit(rateLimitKey)) {
+    return NextResponse.json(
+      { error: '너무 많은 시도. 잠시 후 다시 시도하세요.' },
+      { status: 429, headers: { 'Retry-After': '600' } }
+    )
+  }
+
+  const body = await req.json().catch(() => ({}))
+  const { pin, status } = body
 
   const validStatuses = ['online', 'vacation']
   if (!validStatuses.includes(status)) {
@@ -43,15 +83,13 @@ export async function PATCH(
     return NextResponse.json({ error: '관리자가 PIN을 설정하지 않았습니다' }, { status: 403 })
   }
 
-  const pinHash = await sha256(pin)
-  if (pinHash !== card.status_pin) {
+  const pinHash = await sha256(String(pin))
+  if (!timingSafeHexEqual(pinHash, String(card.status_pin))) {
     return NextResponse.json({ error: 'PIN이 올바르지 않습니다' }, { status: 401 })
   }
 
-  await supabase
-    .from('cards')
-    .update({ status })
-    .eq('id', card.id)
+  clearPinRateLimit(rateLimitKey)
 
+  await supabase.from('cards').update({ status }).eq('id', card.id)
   return NextResponse.json({ status })
 }

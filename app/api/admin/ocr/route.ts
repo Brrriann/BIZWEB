@@ -2,10 +2,13 @@
 export const runtime = 'edge'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/lib/admin-auth'
 
 export async function POST(req: NextRequest) {
+  if (!(await requireAdmin(req))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
   const apiKey = process.env.GEMINI_API_KEY
-  if (!apiKey) return NextResponse.json({ error: 'GEMINI_API_KEY not set' }, { status: 500 })
+  if (!apiKey) return NextResponse.json({ error: 'OCR를 사용할 수 없습니다' }, { status: 500 })
 
   const { imageBase64, mimeType } = await req.json()
   if (!imageBase64) return NextResponse.json({ error: 'No image provided' }, { status: 400 })
@@ -38,8 +41,7 @@ export async function POST(req: NextRequest) {
   )
 
   if (!res.ok) {
-    const err = await res.text()
-    return NextResponse.json({ error: err }, { status: res.status })
+    return NextResponse.json({ error: 'OCR 처리 중 오류가 발생했습니다' }, { status: 502 })
   }
 
   const data = await res.json()
@@ -47,12 +49,12 @@ export async function POST(req: NextRequest) {
 
   // Extract JSON from response
   const match = text.match(/\{[\s\S]*\}/)
-  if (!match) return NextResponse.json({ error: 'No JSON in response', raw: text }, { status: 422 })
+  if (!match) return NextResponse.json({ error: '명함 정보를 인식하지 못했습니다' }, { status: 422 })
 
   try {
     const parsed = JSON.parse(match[0])
     return NextResponse.json(parsed)
   } catch {
-    return NextResponse.json({ error: 'JSON parse error', raw: text }, { status: 422 })
+    return NextResponse.json({ error: '명함 정보를 인식하지 못했습니다' }, { status: 422 })
   }
 }

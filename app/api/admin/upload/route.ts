@@ -6,7 +6,12 @@ import { getSupabaseServer } from '@/lib/supabase'
 import { requireAdmin } from '@/lib/admin-auth'
 
 const MAX_SIZE = 5 * 1024 * 1024 // 5MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const ALLOWED_TYPES: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png':  'png',
+  'image/webp': 'webp',
+  'image/gif':  'gif',
+}
 
 export async function POST(req: NextRequest) {
   if (!(await requireAdmin(req))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -14,11 +19,14 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData()
   const file = formData.get('file') as File | null
   if (!file) return NextResponse.json({ error: 'file required' }, { status: 400 })
-  if (!ALLOWED_TYPES.includes(file.type)) return NextResponse.json({ error: '허용되지 않는 파일 형식' }, { status: 400 })
+
+  // Extension is derived from MIME type — never from the user-supplied filename
+  const ext = ALLOWED_TYPES[file.type]
+  if (!ext) return NextResponse.json({ error: '허용되지 않는 파일 형식' }, { status: 400 })
   if (file.size > MAX_SIZE) return NextResponse.json({ error: '파일 크기는 5MB 이하' }, { status: 400 })
 
-  const ext = file.name.split('.').pop()
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+  // Filename is fully server-generated — no user input
+  const fileName = `${Date.now()}-${crypto.randomUUID()}.${ext}`
   const buffer = await file.arrayBuffer()
 
   const supabase = getSupabaseServer()
