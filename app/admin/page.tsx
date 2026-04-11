@@ -5,10 +5,12 @@ export const runtime = 'edge'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Card } from '@/lib/types'
+import BulkImport from '@/components/admin/BulkImport'
 
 export default function AdminPage() {
   const [cards, setCards] = useState<Card[]>([])
   const [showNew, setShowNew] = useState(false)
+  const [showBulk, setShowBulk] = useState(false)
   const [newSlug, setNewSlug] = useState('')
   const [newName, setNewName] = useState('')
   const [error, setError] = useState('')
@@ -50,7 +52,12 @@ export default function AdminPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>고객 명함 목록</h1>
         <div className="flex gap-2">
-          <button onClick={() => setShowNew(true)}
+          <button onClick={() => { setShowBulk(v => !v); setShowNew(false) }}
+            className="rounded-full px-5 py-2 text-sm font-bold transition-all hover:scale-105"
+            style={{ backgroundColor: showBulk ? 'var(--bg-elevated)' : 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}>
+            일괄 등록
+          </button>
+          <button onClick={() => { setShowNew(true); setShowBulk(false) }}
             className="rounded-full px-5 py-2 text-sm font-bold uppercase tracking-wider transition-all hover:scale-105"
             style={{ backgroundColor: 'var(--accent)', color: '#000', letterSpacing: '0.05em' }}>
             + 새 명함
@@ -58,6 +65,8 @@ export default function AdminPage() {
           <button onClick={logout} className="text-sm px-3" style={{ color: 'var(--text-muted)' }}>로그아웃</button>
         </div>
       </div>
+
+      {showBulk && <BulkImport />}
 
       {showNew && (
         <>
