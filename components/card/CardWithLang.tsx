@@ -48,6 +48,8 @@ export function CardWithLang({ card }: Props) {
         profileImageUrl={mergedCard.profile_image_url}
         themeColor={mergedCard.theme_color}
         status={mergedCard.status}
+        slug={mergedCard.slug}
+        hasPIN={!!mergedCard.status_pin}
       />
       <ContactInfo card={mergedCard} />
     </div>

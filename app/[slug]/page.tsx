@@ -9,6 +9,7 @@ import { SocialLinks } from '@/components/card/SocialLinks'
 import { ViewCounter } from '@/components/card/ViewCounter'
 import { ThemeToggle } from '@/components/card/ThemeToggle'
 import { Gallery, CardWithLang, IntroAnimation } from '@/components/card/CardDynamicComponents'
+import { IntroErrorBoundary } from '@/components/card/IntroErrorBoundary'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -53,12 +54,14 @@ export default async function CardPage({ params }: Props) {
       style={{ backgroundColor: 'var(--bg-base)', transition: 'background-color 0.3s ease' }}
     >
       {card.intro_animation && (
-        <IntroAnimation
-          preset={card.intro_animation}
-          cardName={card.name}
-          themeColor={card.theme_color}
-          slug={card.slug}
-        />
+        <IntroErrorBoundary>
+          <IntroAnimation
+            preset={String(card.intro_animation)}
+            cardName={String(card.name ?? '')}
+            themeColor={String(card.theme_color ?? '#2563eb')}
+            slug={String(card.slug)}
+          />
+        </IntroErrorBoundary>
       )}
       <ThemeToggle />
       <CardWithLang card={card} />

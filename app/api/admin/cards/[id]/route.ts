@@ -22,13 +22,22 @@ export async function PUT(req: NextRequest, { params }: Params) {
   const { id } = await params
   const body = await req.json()
   const supabase = getSupabaseServer()
-  const { data, error } = await supabase.from('cards').update({
+  const patch: Record<string, unknown> = {
     name: body.name, title: body.title, company: body.company,
     phone: body.phone, email: body.email, address: body.address,
     website: body.website, bio: body.bio,
     profile_image_url: body.profile_image_url,
     theme_color: body.theme_color, is_active: body.is_active,
-  }).eq('id', id).select().single()
+    // v2 fields
+    supported_languages: body.supported_languages,
+    translations: body.translations,
+    status: body.status,
+    intro_animation: body.intro_animation ?? null,
+    show_qr_card_cta: body.show_qr_card_cta,
+    social_links_title: body.social_links_title,
+  }
+  if (body.status_pin !== undefined) patch.status_pin = body.status_pin
+  const { data, error } = await supabase.from('cards').update(patch).eq('id', id).select().single()
   if (error || !data) return NextResponse.json({ error: error?.message ?? 'Not found' }, { status: 500 })
   revalidatePath(`/${data.slug}`)
   return NextResponse.json(data)

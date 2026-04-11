@@ -3,11 +3,7 @@
 import { useRef } from 'react'
 import { User } from 'lucide-react'
 import Image from 'next/image'
-
-const STATUS_CONFIG: Record<string, { emoji: string; label: string }> = {
-  online:   { emoji: '🟢', label: '온라인' },
-  vacation: { emoji: '🏖️', label: '휴가중' },
-}
+import { InlineStatusBadge } from './InlineStatusBadge'
 
 interface Props {
   name: string
@@ -15,17 +11,19 @@ interface Props {
   company?: string
   profileImageUrl?: string
   themeColor: string
-  status?: string
+  status?: unknown
+  slug?: string
+  hasPIN?: boolean
 }
 
-export function HeroSection({ name, title, company, profileImageUrl, themeColor, status }: Props) {
+export function HeroSection({ name, title, company, profileImageUrl, themeColor, status, slug, hasPIN }: Props) {
   const imgRef = useRef<HTMLDivElement>(null)
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = imgRef.current
     if (!el) return
     const rect = el.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width - 0.5   // -0.5 to 0.5
+    const x = (e.clientX - rect.left) / rect.width - 0.5
     const y = (e.clientY - rect.top) / rect.height - 0.5
     el.style.transform = `perspective(400px) rotateX(${-y * 15}deg) rotateY(${x * 15}deg) scale(1.05)`
   }
@@ -40,9 +38,7 @@ export function HeroSection({ name, title, company, profileImageUrl, themeColor,
     <div className="relative">
       <div
         className="h-36 w-full"
-        style={{
-          background: `linear-gradient(180deg, ${themeColor} 0%, var(--bg-base) 100%)`,
-        }}
+        style={{ background: `linear-gradient(180deg, ${themeColor ?? '#2563eb'} 0%, var(--bg-base) 100%)` }}
       />
       <div className="px-5 pb-5">
         <div className="flex items-end gap-4 -mt-10">
@@ -67,21 +63,18 @@ export function HeroSection({ name, title, company, profileImageUrl, themeColor,
             )}
           </div>
           <div className="pb-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{name}</h1>
-              {status && STATUS_CONFIG[status] && (
-                <span
-                  className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                  style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
-                >
-                  {STATUS_CONFIG[status].emoji} {STATUS_CONFIG[status].label}
-                </span>
+              {slug && status != null && (
+                <InlineStatusBadge
+                  slug={slug}
+                  initialStatus={status}
+                  hasPIN={!!hasPIN}
+                />
               )}
             </div>
             {title && <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{title}</p>}
-            {company && (
-              <p className="text-sm font-semibold" style={{ color: themeColor }}>{company}</p>
-            )}
+            {company && <p className="text-sm font-semibold" style={{ color: themeColor ?? '#2563eb' }}>{company}</p>}
           </div>
         </div>
       </div>
