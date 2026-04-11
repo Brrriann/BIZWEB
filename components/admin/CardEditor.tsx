@@ -13,12 +13,22 @@ import type { Card, SocialLink, GalleryImage, CardTranslation, ExtraContact } fr
 // Auto-format Korean phone number with hyphens
 function formatPhone(raw: string): string {
   const d = raw.replace(/\D/g, '').slice(0, 11)
+
+  // 02 (Seoul): 2-3-4 or 2-4-4
   if (d.startsWith('02')) {
     if (d.length <= 2) return d
-    if (d.length <= 6) return `${d.slice(0,2)}-${d.slice(2)}`
+    if (d.length <= 5) return `${d.slice(0,2)}-${d.slice(2)}`
     if (d.length <= 9) return `${d.slice(0,2)}-${d.slice(2,5)}-${d.slice(5)}`
     return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`
   }
+
+  // 15xx, 16xx, 18xx 고객센터·대표번호: 4-4
+  if (/^1[5689]\d{2}/.test(d)) {
+    if (d.length <= 4) return d
+    return `${d.slice(0,4)}-${d.slice(4,8)}`
+  }
+
+  // 일반 3자리 지역번호 (010, 031 등): 3-3-4 or 3-4-4
   if (d.length <= 3) return d
   if (d.length <= 6) return `${d.slice(0,3)}-${d.slice(3)}`
   if (d.length <= 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`
