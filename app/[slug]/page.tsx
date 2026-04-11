@@ -30,9 +30,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const data = await getCardData(slug)
   if (!data) return { title: '페이지를 찾을 수 없습니다' }
+  const { card } = data
+  const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`
   return {
-    title: `${data.card.name} | 마이네임이즈`,
-    description: data.card.bio ?? `${data.card.name}의 디지털 명함`,
+    title: `${card.name} | 마이네임이즈`,
+    description: card.bio ?? `${card.name}${card.company ? ` · ${card.company}` : ''}의 디지털 명함`,
+    openGraph: {
+      title: card.name,
+      description: card.bio ?? `${card.name}${card.company ? ` · ${card.company}` : ''}의 디지털 명함`,
+      url: pageUrl,
+      siteName: 'MY NAME IS.',
+      type: 'profile',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: card.name,
+      description: card.bio ?? `${card.name}의 디지털 명함`,
+    },
   }
 }
 

@@ -2,8 +2,19 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: '마이네임이즈',
-  description: '모바일 디지털 명함 서비스',
+  title: 'MY NAME IS. — 디지털 명함',
+  description: '링크 하나로 전달하는 나만의 디지털 명함. 다국어 지원, 실시간 상태, QR·NFC 실물 카드 제작.',
+  openGraph: {
+    title: 'MY NAME IS.',
+    description: '링크 하나로 전달하는 나만의 디지털 명함',
+    siteName: 'MY NAME IS.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MY NAME IS.',
+    description: '링크 하나로 전달하는 나만의 디지털 명함',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
