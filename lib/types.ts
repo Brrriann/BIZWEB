@@ -3,6 +3,7 @@
 export interface CardTranslation {
   name?: string
   title?: string
+  company?: string
   bio?: string
   address?: string
 }

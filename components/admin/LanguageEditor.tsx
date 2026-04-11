@@ -16,6 +16,7 @@ const ALL_LANGS: { code: string; label: string }[] = [
 const FIELD_LABELS: { key: keyof CardTranslation; label: string }[] = [
   { key: 'name',    label: '이름' },
   { key: 'title',   label: '직함' },
+  { key: 'company', label: '회사명' },
   { key: 'bio',     label: '소개글' },
   { key: 'address', label: '주소' },
 ]

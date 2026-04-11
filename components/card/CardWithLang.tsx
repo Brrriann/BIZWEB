@@ -28,6 +28,7 @@ export function CardWithLang({ card, pageUrl }: Props) {
     ...card,
     name: translation.name || card.name,
     title: translation.title || card.title,
+    company: translation.company || card.company,
     bio: translation.bio || card.bio,
     address: translation.address || card.address,
   }
