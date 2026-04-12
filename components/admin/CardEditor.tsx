@@ -1,7 +1,6 @@
 // components/admin/CardEditor.tsx
 'use client'
 import { useState, useRef } from 'react'
-import Image from 'next/image'
 import { ScanLine } from 'lucide-react'
 import { ThemePicker } from './ThemePicker'
 import { SocialLinksEditor } from './SocialLinksEditor'
@@ -177,7 +176,7 @@ export function CardEditor({ card, socialLinks, galleryImages, onRefresh, onDele
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--bg-elevated)', border: '2px solid var(--border)' }}>
             {form.profile_image_url
-              ? <Image src={form.profile_image_url} alt="" width={64} height={64} className="object-cover w-full h-full" />
+              ? <img src={form.profile_image_url} alt="" className="object-cover w-full h-full" />
               : <div className="w-full h-full flex items-center justify-center text-2xl">👤</div>
             }
           </div>

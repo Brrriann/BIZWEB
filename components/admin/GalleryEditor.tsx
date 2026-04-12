@@ -1,7 +1,6 @@
 // components/admin/GalleryEditor.tsx
 'use client'
 import { useState } from 'react'
-import Image from 'next/image'
 import type { GalleryImage } from '@/lib/types'
 
 const MAX_FILE_SIZE = 500 * 1024 // 500KB
@@ -98,7 +97,7 @@ export function GalleryEditor({ cardId, images, onUpdate }: Props) {
       <div className="grid grid-cols-3 gap-2 mb-3">
         {images.map(img => (
           <div key={img.id} className="relative aspect-square">
-            <Image src={img.image_url} alt="" fill className="object-cover rounded-lg" />
+            <img src={img.image_url} alt="" className="absolute inset-0 w-full h-full object-cover rounded-lg" />
             <button type="button" onClick={() => removeImage(img.id)}
               className="absolute top-1 right-1 rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold"
               style={{ backgroundColor: '#f3727f', color: '#000' }}>×</button>
