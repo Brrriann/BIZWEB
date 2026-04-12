@@ -1,7 +1,6 @@
 // components/card/Gallery.tsx
 'use client'
 import { useState, useRef } from 'react'
-import Image from 'next/image'
 import type { GalleryImage } from '@/lib/types'
 
 interface Props { images: GalleryImage[] }
@@ -55,7 +54,7 @@ export function Gallery({ images }: Props) {
             className="aspect-square overflow-hidden rounded-lg transition-all duration-200 hover:opacity-80 hover:scale-[1.03]"
             style={{ boxShadow: 'var(--shadow-card)' }}
           >
-            <Image src={img.image_url} alt={img.caption ?? ''} width={200} height={200}
+            <img src={img.image_url} alt={img.caption ?? ''}
               className="object-cover w-full h-full" />
           </button>
         ))}
@@ -113,11 +112,9 @@ export function Gallery({ images }: Props) {
 
           {/* Image content */}
           <div className="max-w-lg w-full" onClick={e => e.stopPropagation()}>
-            <Image
+            <img
               src={selected.image_url}
               alt={selected.caption ?? ''}
-              width={500}
-              height={500}
               className="rounded-xl object-contain w-full"
               style={{ boxShadow: 'var(--shadow-elevated)' }}
             />
